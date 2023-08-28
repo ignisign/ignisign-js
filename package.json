@@ -1,0 +1,40 @@
+{
+  "name": "@ignisign/js",
+  "version": "1.0.1",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ignisign/ignisign-js.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "lint": "eslint ./src --ext .ts,.tsx",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "clean-win": "rd /s /q dist && del /f tsconfig.tsbuildinfo",
+    "watch": "tsc -b -w --preserveWatchOutput"
+  },
+  "dependencies": {
+    "@ignisign/public": "1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-typescript": "^7.22.11",
+    "babel-loader": "^9.1.3",
+    "ts-loader": "^9.4.4",
+    "ts-node": "^8.10.1",
+    "tslib": "1.9.3",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+
+}
+
+* {
+  outline: none;
+}
+
+html, body, body>#root, #app, #app>div {
+  min-height: 100% !important;
+}
+
+.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]{
+  padding-top: 2px !important;
+  padding-bottom: 0 !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.body-content {
+  /* Height of screen without header & footer */
+  min-height: calc(100vh);
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.p-none {
+  padding: 0 !important;
+}
+
+.header-drop-down-triangle {
+  width: 0; 
+  height: 0; 
+  border-left:   10px solid transparent;
+  border-right:  10px solid transparent;
+  border-bottom: 10px solid white;
+}
+
+.MuiAccordion-root {
+  @apply bg-gray-100 !important;
+}
+
+.z-200-important {
+  z-index: 200 !important;
+}
+
+.z-300-important {
+  z-index: 300 !important;
+}
+
+.text-xxs {
+  font-size: .6rem;
+}
+
+.spc-card {
+  position: relative;
+  min-width : 12rem;
+
+  &::after {
+  
+  }
+}

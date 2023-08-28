@@ -1,0 +1,275 @@
+/* ./src/index.css */
+/*@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap');*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #000000;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/** TYPOGRAPHY **/
+
+.text-pr-l {
+  @apply text-primary-200;
+}
+
+.text-pr-d {
+  @apply text-primary-800;
+}
+
+.text-sd-l {
+  @apply text-secondary-100;
+}
+
+.text-sd-d {
+  @apply text-secondary-900;
+}
+
+.text-std {
+  @apply text-gray-900 dark:text-gray-100;
+}
+
+.text-l {
+  @apply text-gray-100;
+}
+
+.text-d {
+  @apply text-gray-900;
+}
+
+.text-std-hover {
+  @apply cursor-pointer;
+  @apply hover:underline;
+  @apply text-gray-900 hover:text-gray-800;
+}
+
+.list-item-primary {
+  @apply mt-2 bg-white border rounded text-black p-2 hover:border-blue-500 hover:bg-blue-100 cursor-pointer;
+}
+
+/************* Utils ***************/
+
+.m-0-important{
+  margin: 0 !important;
+}
+
+
+
+/************* ***************/
+@supports(height: max(0px,0px)) {
+  .top-menu {
+    height: calc(env(safe-area-inset-top) + 4rem); /* iOS 11.2 */
+  }
+}
+
+
+.main-container {
+  margin-top: calc(env(safe-area-inset-top) + 5rem); /* iOS 11.2 */
+}
+
+.main-container-without-org {
+  margin-top: calc(env(safe-area-inset-top) + 3rem); /* iOS 11.2 */
+}
+
+
+@supports(margin: max(0px,0px)) {
+  .top-menu-content {
+    margin-top : max(calc(env(safe-area-inset-top) - 0.75rem ), 0.25rem);
+
+  }
+
+  menu-burger {
+    margin-left : max(calc(env(safe-area-inset-left) + 0.5rem ), 0.5rem)
+  }
+}
+
+.footer-safe {
+  height: calc(env(safe-area-inset-bottom) + 3.0rem ); /* iOS 11.2 */
+  /*padding-bottom: env(safe-area-inset-bottom); !* iOS 11.2 *!*/
+  /*margin-bottom: env(safe-area-inset-bottom); !* iOS 11.2 *!*/
+}
+
+.footer-safe-padding-top {
+
+
+}
+
+.footer-safe-padding-top {
+  height: calc(env(safe-area-inset-bottom) + 3.0rem ); /* iOS 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* iOS 11.2 */
+}
+
+
+
+.legal-doc p {
+  @apply my-2
+}
+
+.legal-doc h1 {
+  @apply text-xl font-semibold mb-4 w-full border-b
+}
+
+
+.legal-doc h2 {
+  @apply text-xl font-semibold mb-4
+}
+
+
+.legal-doc h3 {
+  @apply text-base font-semibold mb-2
+}
+
+
+.no-focus-webkit {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*.MuiSpeedDial-root {*/
+/*  transition-duration: 0s !important;*/
+/*}*/
+
+
+
+/*************** SMS CODE INPUT **********/
+
+.sms-code-wrapper {
+  position: relative;
+}
+
+.sms-code-textfield {
+  position: absolute !important;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 10;
+}
+
+.sms-code-textfield input{
+  padding: 10px 0px !important;
+}
+
+.sms-code-numbers-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  overflow: hidden;
+  @apply rounded;
+  @apply border;
+  @apply border-white;
+}
+
+.sms-code-number{
+  width: 32px;
+  height: 37px;
+  @apply bg-primary-50;
+  @apply border;
+  @apply border-primary-100;
+  @apply rounded;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  transition: ease-in-out all .2s;
+}
+
+.sms-code-number-empty {
+  color: gray;
+}
+
+.sms-code-number-filled {
+  @apply text-primary-800
+}
+
+.sms-code-number-current {
+  transition: ease-in-out opacity .2s;
+  @apply border-primary-300 !important;
+}
+
+.sms-code-textfield-focused ~ .sms-code-numbers-container .sms-code-number-next::after{
+  display: block !important;
+}
+
+.sms-code-number-next {
+  position: relative;
+}
+
+.sms-code-number-next::after {
+  content: '';
+  position: absolute;
+  height: 1px;
+  width: 70%;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  @apply bg-primary-700;
+  @apply rounded;
+  animation: blink infinite 1s;
+  display: none;
+}
+
+ .sms-code-invalid .sms-code-number{ 
+  transition: ease-in-out all .2s;
+  @apply bg-red-50 !important;
+  @apply border-red-100 !important;
+  @apply text-red-700 !important;
+}
+
+.sms-code-invalid {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.sms-code-valid {
+  transition-delay: .2s;
+  transition-property: all;
+  transition-duration: .2s;
+  transition-timing-function: ease-in-out;
+  gap: 0px;
+  @apply border-green-700 !important;
+}
+
+.sms-code-valid .sms-code-number { 
+  transition: ease-in-out all .2s;
+  @apply bg-green-50 !important;
+  @apply text-green-700 !important;
+  @apply border-green-50 !important;
+  @apply rounded-none;
+}
+
+@keyframes blink {
+  from {
+    opacity: 0 
+  }
+  50% {
+     opacity: 1 
+  } 
+  to {
+    opacity: 0 
+  }
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}

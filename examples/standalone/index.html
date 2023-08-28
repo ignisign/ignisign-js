@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ignisign SDK example</title>
+  <meta name="author" content="Ignisign SA">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://unpkg.com/@ignisign/js@1.0.0/dist/index.js" ></script>
+  
+</head>
+
+<body>
+
+  <div>
+    <button id="btn-init-signature-request">
+      Init signature request 
+    </button>
+  </div>
+  
+  <div id='test-ignisign-sdk'></div>
+
+  
+  
+  <script>
+    
+    const initSignatureRequest = async () => {
+      console.log('initSignatureRequest');
+    try {
+      const appId              = "TODO"; 
+      const appEnv             = "DEVELOPMENT";                          
+      
+      const ignisign           = new IgnisignJs(appId, appEnv);
+      const authSecret         = "TODO";
+      const signatureRequestId = "TODO";
+      const signerId           = "TODO";
+      const token              = "TODO";
+
+      ignisign.initSignatureRequest(
+        'test-ignisign-sdk',
+        signatureRequestId,
+        signerId,
+        token,
+        authSecret,
+        {},
+        { width:"100%", height:"710" }
+      );
+      
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  document.getElementById('btn-init-signature-request').onclick = initSignatureRequest;
+
+  </script>
+</body>
+
+</html>

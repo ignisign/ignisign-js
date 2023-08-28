@@ -1,0 +1,63 @@
+Arguments: 
+  /Users/boardigo/.nvm/versions/node/v18.16.0/bin/node /Users/boardigo/.yarn/bin/yarn.js install
+
+PATH: 
+  /Users/boardigo/.yarn/bin:/Users/boardigo/.config/yarn/global/node_modules/.bin:/Users/boardigo/.nvm/versions/node/v18.16.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  18.16.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@ignisign%2fpublic: Not found
+      at params.callback [as _callback] (/Users/boardigo/.yarn/lib/cli.js:67029:18)
+      at self.callback (/Users/boardigo/.yarn/lib/cli.js:140883:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (/Users/boardigo/.yarn/lib/cli.js:141855:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (/Users/boardigo/.yarn/lib/cli.js:141777:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+npm manifest: 
+  {
+    "name": "@ignisign/js",
+    "version": "0.0.1",
+    "license": "MIT",
+    "private": true,
+    "files": [
+      "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+      "build": "tsc -b",
+      "build-fo-api": "tsc -b",
+      "lint": "eslint ./src --ext .ts,.tsx",
+      "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+      "clean-win": "rd /s /q dist && del /f tsconfig.tsbuildinfo",
+      "watch": "tsc -b -w --preserveWatchOutput",
+      "watch-fo-api": "tsc -b -w --preserveWatchOutput"
+    },
+    "dependencies": {
+      "@ignisign/public": "0.0.*"
+    },
+    "devDependencies": {
+      "ts-node": "^8.10.1",
+      "tslib": "1.9.3",
+      "typescript": "^4.1.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

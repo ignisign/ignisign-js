@@ -1,0 +1,11 @@
+node_modules
+examples/npm-based/node_modules
+
+dist
+examples/npm-based/dist
+
+examples/standalone/data-test.txt
+
+tsconfig.tsbuildinfo
+.npmrc
+.env
