@@ -16,7 +16,8 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "tsc -b",
+    "build-webpack": "webpack --config webpack.config.js",
     "lint": "eslint ./src --ext .ts,.tsx",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "clean-win": "rd /s /q dist && del /f tsconfig.tsbuildinfo",

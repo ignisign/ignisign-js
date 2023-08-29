@@ -7,7 +7,7 @@
     "strict": false,
     "skipLibCheck": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "umd",
     "moduleResolution": "node",
     "target": "es2015",
     "composite": true,
