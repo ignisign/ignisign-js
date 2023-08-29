@@ -6,15 +6,14 @@ import { ApiService } from '../services/api.service';
 import { useSignatureRequests } from '../contexts/signature-request.context';
 import { useSignatureProfiles } from '../contexts/signature-profile.context';
 import { Snackbar } from '@mui/material';
-import { useStateWithRef } from '../_core/utils/useStateWithRef';
+import { useStateWithRef } from '../utils/useStateWithRef';
 import { IGNISIGN_APPLICATION_ENV, IgnisignPrivateFileDto } from '@ignisign/public';
 import { IgnisignJs } from '@ignisign/js';
 import { MySignatureRequest, Signer } from '../models/signature-request.front.model';
 import { BiUserCircle } from "react-icons/bi";
 import { HiArrowNarrowRight } from "react-icons/hi";
 
-
-const IGNISIGN_CLIENT_SIGN_URL = 'http://localhost:8080';
+const IGNISIGN_CLIENT_SIGN_URL = process.env.REACT_IGNISIGN_CLIENT_SIGN_URL || 'https://sign.ignisign.io';
 
 const SignatureRequestsDetailPage = () => {
   const history                                            = useHistory();
@@ -129,7 +128,7 @@ const EmbeddedSignature = ({signatureRequestId, signerId, token, authSecret}) =>
       start();
     }, [])
     
-  const providePrivateFileDto = async (documentId) : Promise<IgnisignPrivateFileDto> => {
+  const handlePrivateFileInfoProvisioning = async (documentId) : Promise<IgnisignPrivateFileDto> => {
     const url = await ApiService.getPrivateFileUrl(documentId);
     return url;
   }
@@ -141,7 +140,7 @@ const EmbeddedSignature = ({signatureRequestId, signerId, token, authSecret}) =>
       
       const ignisign = new IgnisignJs(appId, appEnv as IGNISIGN_APPLICATION_ENV, IGNISIGN_CLIENT_SIGN_URL);
 
-      console.log('initSignatureRequest : ', {
+      console.debug('initSignatureRequest : ', {
         appId,
         appEnv,
         signatureRequestId,
@@ -156,7 +155,8 @@ const EmbeddedSignature = ({signatureRequestId, signerId, token, authSecret}) =>
         signerId, 
         token,
         authSecret,
-        { providePrivateFileDto },
+        true,
+        { handlePrivateFileInfoProvisioning },
         { width:"100%", height:"710" }
       );
       

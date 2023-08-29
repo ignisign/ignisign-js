@@ -8,9 +8,9 @@ export type MySignatureRequestSigners = {
   _id                 ?: string;
   signatureRequestId  ?: string;
   signers ?: {
-    signerId   ?: string;
+    signerId ?: string;
     myUserId ?: string;
-    token      ?: string;
+    token    ?: string;
   }[]
 }
 

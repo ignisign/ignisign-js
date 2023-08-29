@@ -17,10 +17,13 @@ import { useIgniSnackbar } from '../contexts/snackbar.context';
 
 const countriesDataset = COUNTRY_LIST.map(c => ({ label : c.name, value: c.code }));
 
+const DEFAULT_PHONE = process.env.REACT_APP_PHONE ?? '';
+const DEFAULT_EMAIL = process.env.REACT_APP_EMAIL ?? '';
+
 const inputs = [
   {label: 'First name',     name: 'firstName'},
   {label: 'Last name',      name: 'lastName'},
-  {label: 'Phone number',   name: 'phoneNumber',        type: 'tel'},
+  {label: 'Phone number',   name: 'phoneNumber',  type: 'tel'},
   {label: 'Email',          name: 'email'},
   {label: 'Nationality',    name: 'nationality',  type: 'select', dataset: countriesDataset},
   {label: 'BirthDate',      name: 'birthDate',    type: 'date'},
@@ -28,13 +31,19 @@ const inputs = [
   {label: 'BirthCountry',   name: 'birthCountry', type: 'select', dataset: countriesDataset},
 ]
 
-/**
- * take standart email and create a random one with +randomNumber before @
- */
+//Take a standard email adresse and create a random one by adding a random number before the @
 const createRandomEmail = (email) => {
+  if(email === '')
+    return '';
+
   const random = Math.floor(Math.random() * (10000 - 1 + 1)) + 1
   const [name, domain] = email.split('@')
   return `${name}+${random}@${domain}`
+}
+
+const createFakeBirthDate = () => {
+  const birthDate = faker.date.birthdate();
+  return `${birthDate.getFullYear()}-${birthDate.getMonth() < 10 ? '0' : ''}${birthDate.getMonth() + 1}-${birthDate.getDate() < 10 ? '0' : ''}${birthDate.getDate()}`
 }
 
 const UsersPage = () => {
@@ -46,15 +55,14 @@ const UsersPage = () => {
   const [isLoading, setIsLoading]    = useState<boolean>(false);
 
   const openModal = () => {
-    form.setValue('firstName', faker.person.firstName())
-    form.setValue('lastName', faker.person.lastName())
-    form.setValue('phoneNumber', process.env.REACT_APP_PHONE ?? '',)
-    form.setValue('email', process.env.REACT_APP_EMAIL ? createRandomEmail(process.env.REACT_APP_EMAIL) : '')
-    // `thibaud+${Math.floor(Math.random() * (10000 - 1 + 1)) + 1}@ignisign.io`
-    const birthDate = faker.date.birthdate()
-    form.setValue('birthDate', `${birthDate.getFullYear()}-${birthDate.getMonth() < 10 ? '0' : ''}${birthDate.getMonth() + 1}-${birthDate.getDate() < 10 ? '0' : ''}${birthDate.getDate()}`)
-    form.setValue('birthPlace', faker.location.city())
-    form.setValue('nationality', faker.location.countryCode())
+    form.setValue('firstName',    faker.person.firstName())
+    form.setValue('lastName',     faker.person.lastName())
+    form.setValue('phoneNumber',  DEFAULT_PHONE)
+    form.setValue('email',        createRandomEmail(DEFAULT_EMAIL))
+    
+    form.setValue('birthDate',    createFakeBirthDate())
+    form.setValue('birthPlace',   faker.location.city())
+    form.setValue('nationality',  faker.location.countryCode())
     form.setValue('birthCountry', faker.location.countryCode())
 
     setIsOpen(true)
@@ -82,11 +90,9 @@ const UsersPage = () => {
     
   }
 
-  if(!users){
-    return <div>Loading</div>
-  }
-
-
+  if(!users)
+    return <div>...Loading</div>
+  
   return <>
     <Dialog open={isOpen} fullWidth maxWidth='xs' onClose={() => setIsOpen(false)}>
         <form onSubmit={form.handleSubmit(addUserFromForm)}>
@@ -166,7 +172,6 @@ const UserItem = ({ user } : { user : MyUser }) => {
         </div>
       </div>
       
-
       <div className='cursor-pointer' onClick={()=> handleDeleteUser(user._id)}>
         {isLoading ? 
           <div className='w-14'> 

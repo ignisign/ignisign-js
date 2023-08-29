@@ -7,9 +7,9 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useHistory, useLocation } from "react-router";
-import { AppRoutesService } from '../_core/remote/app-routes.service';
-import Dropdown from '../components/dropdown';
+import Dropdown from './dropdown';
 import { useSignatureProfiles } from '../contexts/signature-profile.context';
+import { FrontUrlProvider } from '../utils/front-url-provider';
 
 const drawerWidth = 240;
 
@@ -32,9 +32,9 @@ const MenuItem = ({link, text}) => {
 const MenuContent = () => {
 
   return <div className='mt-2'>
-    <MenuItem link={AppRoutesService.homePage()} text='Home'/>
-    <MenuItem link={AppRoutesService.usersPage()} text='Users'/>
-    <MenuItem link={AppRoutesService.signatureRequestsPage()} text='Signature request'/>
+    <MenuItem link={FrontUrlProvider.homePage()} text='Home'/>
+    <MenuItem link={FrontUrlProvider.usersPage()} text='Users'/>
+    <MenuItem link={FrontUrlProvider.signatureRequestsPage()} text='Signature request'/>
   </div>
 }
 
@@ -75,7 +75,7 @@ const Menu = ({children}) => {
         </div>
       </Drawer>
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <div className='pt-5 h-full'>
+            <div className='pt-4 h-full'>
               <div className='mx-auto max-w-7xl'>
                 {children}
               </div>

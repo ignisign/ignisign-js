@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { configureInterceptors } from "./_core/remote/http-apis";
-import { HomePage } from './home.page';
-import './index.css';
-import './additional-style.css';
-
-import "./_core/style/tailwind-theme.css";
-
-import { useDarkMode } from './_core/style/DarkModeContext.context';
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
-import nightwind from "nightwind/helper";
 import { createTheme } from "@material-ui/core/styles";
-import { AppRoutesService } from "./_core/remote/app-routes.service";
-import Menu from './layouts/menu';
-import SignatureRequestsPage from './pages/signature-requests.page';
-import SignatureRequestCreationPage from './pages/signature-request-creation.page';
-import { UsersContextProvider } from './contexts/user.context';
-import SignatureRequestsDetailPage from './pages/signature-request-details.page';
+
 import { SignatureRequestsContextProvider } from './contexts/signature-request.context';
 import { SignatureProfilesContextProvider } from './contexts/signature-profile.context';
-import UsersPage from './pages/users.page';
 import { IgnisignSnackbarProvider } from './contexts/snackbar.context';
+import { UsersContextProvider } from './contexts/user.context';
+
+import SignatureRequestsPage from './pages/signature-requests.page';
+import SignatureRequestCreationPage from './pages/signature-request-creation.page';
+import SignatureRequestsDetailPage from './pages/signature-request-details.page';
+import UsersPage from './pages/users.page';
+import { HomePage } from './pages/home.page';
+
+import Menu from './components/menu';
+
+import muiTheme from './utils/mui-theme';
+import { FrontUrlProvider } from './utils/front-url-provider';
+
+import './index.css';
+
+
+
 
 const NotFoundPage = () => {
   return (
@@ -34,16 +36,13 @@ const NotFoundPage = () => {
 
 function AppRouter() {
   return (
-    <div>
+    <div className='mt-12'>
       <Switch>
-        {/************** ORGANIZATIONS ******************/}
-
-        <Route exact path={AppRoutesService.homePage()}>                     <HomePage/>                      </Route>
-        <Route exact path={AppRoutesService.usersPage()}>                    <UsersPage/>                     </Route>
-        <Route exact path={AppRoutesService.signatureRequestsPage()}>        <SignatureRequestsPage/>         </Route>
-        <Route exact path={AppRoutesService.signatureRequestCreationPage()}> <SignatureRequestCreationPage/>  </Route>
-        <Route exact path={AppRoutesService.signatureRequestsDetailPage()}>  <SignatureRequestsDetailPage/>   </Route>
-
+        <Route exact path={FrontUrlProvider.homePage()}>                     <HomePage/>                      </Route>
+        <Route exact path={FrontUrlProvider.usersPage()}>                    <UsersPage/>                     </Route>
+        <Route exact path={FrontUrlProvider.signatureRequestsPage()}>        <SignatureRequestsPage/>         </Route>
+        <Route exact path={FrontUrlProvider.signatureRequestCreationPage()}> <SignatureRequestCreationPage/>  </Route>
+        <Route exact path={FrontUrlProvider.signatureRequestsDetailPage()}>  <SignatureRequestsDetailPage/>   </Route>
         <Route> <NotFoundPage /></Route>
       </Switch>
     </div>
@@ -51,27 +50,22 @@ function AppRouter() {
 }
 
 function App() {
-  const { theme } = useDarkMode();
-  const themeConfig = createTheme(theme);
-
-  useEffect(() => {
-    // document.body.className = "bg-gray-50"
-  }, []);
+  const themeConfig = createTheme(muiTheme);
 
   return (
      <MuiThemeProvider theme={themeConfig}>
-       <script dangerouslySetInnerHTML={{ __html: nightwind.init() }} />^
        <CssBaseline/>
         <Router>
           <IgnisignSnackbarProvider>
             <SignatureProfilesContextProvider>
-              <Menu>
-                <SignatureRequestsContextProvider>
-                  <UsersContextProvider>
+              <SignatureRequestsContextProvider>
+                <UsersContextProvider>
+                  <Menu>
                     <AppRouter/>
-                  </UsersContextProvider>
-                </SignatureRequestsContextProvider>
-              </Menu>
+                  </Menu>
+                </UsersContextProvider>
+              </SignatureRequestsContextProvider>
+              
             </SignatureProfilesContextProvider>
           </IgnisignSnackbarProvider>
         </Router>
@@ -79,15 +73,7 @@ function App() {
   )
 }
 
-function AppContainerDarkMode() {
-  return <App />
-  // (<DarkModeContextProvider>
-  //   <App />
-  // </DarkModeContextProvider>)
-}
+ReactDOM.render(<App />, document.getElementById('root'));
 
-ReactDOM.render(<AppContainerDarkMode />, document.getElementById('root'));
-
-configureInterceptors();
 
 
