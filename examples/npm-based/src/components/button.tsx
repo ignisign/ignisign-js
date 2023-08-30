@@ -1,7 +1,7 @@
 
 import MuiButton from '@mui/material/Button';
 import { PropsWithChildren } from 'react';
-import { LoadingSpinner } from './LoadingSpinner';
+import { LoadingSpinner } from './loadingSpinner';
 
 type ButtonType = 'button' | 'submit';
 interface IButtonProps {

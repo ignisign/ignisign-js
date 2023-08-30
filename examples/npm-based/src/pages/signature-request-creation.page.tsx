@@ -72,8 +72,6 @@ const SignatureRequestCreationPage = () => {
       file: e
     }))
     setSelectedFiles([...keepFiles, ...newFiles]);
-
-    console.log('files', files);
   };
 
   return (

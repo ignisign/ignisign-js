@@ -2,7 +2,7 @@ import { useHistory } from "react-router";
 import { useSignatureRequests } from '../contexts/signature-request.context';
 import { useSignatureProfiles } from '../contexts/signature-profile.context';
 import { HeaderPage } from '../components/headerPage';
-import { NoContent } from '../components/NoContent';
+import { NoContent } from '../components/noContent';
 import { MySignatureRequest } from '../models/signature-request.front.model';
 import { FaFileSignature } from "react-icons/fa";
 import { FrontUrlProvider } from '../utils/front-url-provider';
