@@ -1,25 +1,28 @@
-import { 
-  IGNISIGN_APPLICATION_ENV, 
-  IGNISIGN_BROADCASTABLE_ACTIONS, 
-  IGNISIGN_BROADCASTABLE_ACTIONS_TYPE, 
+import {
+  IGNISIGN_APPLICATION_ENV,
+  IGNISIGN_BROADCASTABLE_ACTIONS,
+  IGNISIGN_BROADCASTABLE_ACTIONS_TYPE,
   IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE,
-  IGNISIGN_BROADCASTABLE_ACTIONS_OPEN_URL,
-  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED,
-  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_CANCELED,
   IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR,
-  IGNISIGN_ERROR_CODES, 
-  IgnisignPrivateFileDto 
+  IGNISIGN_ERROR_CODES,
+  IgnisignPrivateFileDto,
+  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED
 } from "@ignisign/public";
 
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
 const IFRAME_MIN_WIDTH  = 300; 
 const IFRAME_MIN_HEIGHT = 500;
 
+export enum IGNISIGN_JS_EVENTS {
+  IGNISIGN_LOADED  = 'IGNISIGN_LOADED',
+  IFRAME_TOO_SMALL = 'IFRAME_TOO_SMALL'
+}
+
 export type Ignisign_InitSignatureRequestCallback = {
   handlePrivateFileInfoProvisioning   ?: (documentId: string, externalDocumentId: string, signerId : string, signatureRequestId: string) => Promise<IgnisignPrivateFileDto>;
   handleSignatureRequestError         ?: (errorCode: IGNISIGN_ERROR_CODES, errorContext: any, signerId: string, signatureRequestId: string) => Promise<void>;
   handleSignatureRequestCancellation  ?: (signerId: string, signatureRequestId: string) => Promise<void>;
-  handleSignatureRequestFinalized     ?: (signatureId: string, signerId: string, signatureRequestId: string) => Promise<void>;
+  handleSignatureRequestFinalized     ?: (signatureIds: string[], signerId: string, signatureRequestId: string) => Promise<void>;
 }
 
 export type Ignisign_iFrameOptions = {
@@ -140,25 +143,14 @@ export class IgnisignJs {
     this._iframeResizeObserver = null;
   }
 
-  public cancelSignatureRequest(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_CANCELED): void {
-
-    if(this._iFrameMessagesCallbacks?.handleSignatureRequestCancellation)
-      this._iFrameMessagesCallbacks.handleSignatureRequestCancellation(
-        this._signerId,
-        this._signatureRequestId
-      );
-
-    if(this._closeOnFinish)
-      this.closeIframe();
-  }
 
   private _finalizeSignatureRequest(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED): void {
-    if(!infos?.data?.signatureId )
+    if(!infos?.data?.signatureIds )
       throw new Error(`event data malformed`);
 
     if(this._iFrameMessagesCallbacks?.handleSignatureRequestFinalized)
       this._iFrameMessagesCallbacks.handleSignatureRequestFinalized(
-        infos.data.signatureId, 
+        infos.data.signatureIds, 
         this._signerId,
         this._signatureRequestId
       );
@@ -168,13 +160,13 @@ export class IgnisignJs {
   }
 
   private _manageSignatureRequestError(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR): void {
-    if(!infos?.data?.errorCode || !infos?.data?.errorContext)
+    if(!infos?.data?.errorCode)
       throw new Error(`event data malformed`);
 
     if(this._iFrameMessagesCallbacks?.handleSignatureRequestError)
       this._iFrameMessagesCallbacks.handleSignatureRequestError(
         infos.data.errorCode, 
-        infos.data.errorContext, 
+        infos?.data?.errorContext, 
         this._signerId,
         this._signatureRequestId
       );
@@ -231,11 +223,7 @@ export class IgnisignJs {
         case IGNISIGN_BROADCASTABLE_ACTIONS.SIGNATURE_FINALIZED:
           this._finalizeSignatureRequest({ type, data });
           break;
-        
-        case IGNISIGN_BROADCASTABLE_ACTIONS.SIGNATURE_CANCELED:
-          this.cancelSignatureRequest({ type, data });
-          break;
-        
+
         case IGNISIGN_BROADCASTABLE_ACTIONS.SIGNATURE_ERROR:
           this._manageSignatureRequestError({ type, data });
           break;
@@ -275,35 +263,21 @@ export class IgnisignJs {
     const docElement = document.getElementById(this._iFrameId);
 
     if(docElement?.offsetHeight < IFRAME_MIN_HEIGHT || docElement?.offsetWidth < IFRAME_MIN_WIDTH) {
-      this.closeIframe();
-      throw new Error(`[ERROR][IgnisignJS]: Iframe is too small. Min width : ${IFRAME_MIN_WIDTH}px, min height : ${IFRAME_MIN_HEIGHT}px`);
+      const ignisignLoadedEvent = new CustomEvent(IGNISIGN_JS_EVENTS.IFRAME_TOO_SMALL, {
+        detail : {
+          width                : docElement?.offsetWidth,
+          height               : docElement?.offsetHeight,
+          minHeightRecommended : IFRAME_MIN_HEIGHT,
+          minWidthRecommended  : IFRAME_MIN_WIDTH
+        }
+      });
+      window.dispatchEvent(ignisignLoadedEvent);
     }
-
-    //TODO => See if we need to display a message if the iframe is too small
-
-    // const sizeTooSmall = docElement?.offsetHeight < IFRAME_MIN_HEIGHT || docElement?.offsetWidth < IFRAME_MIN_WIDTH;
-
-    // if(sizeTooSmall && !this._iframeTooSmall) {
-    //   this._iframeTooSmall = true;
-    //   document.getElementById(this._htmlElementId).innerHTML = `
-    //     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; width: 100%;">
-    //       <div style="font-weight: bold;;"> The element is too small to display the signature request </div>
-    //     </div>
-    //   `;
-      
-
-      
-    // } else if(!sizeTooSmall && this._iframeTooSmall) {
-    //   document.getElementById(this._htmlElementId).innerHTML = this._iframeHtml;
-    //   this._iframeTooSmall = false;
-    // } else {
-    //   this._iframeTooSmall = false;
-    // }
   }
 
 }
 
 window['IgnisignJs'] = IgnisignJs;
 
-const ignisignLoadedEvent = new CustomEvent('IgnisignLoaded');
+const ignisignLoadedEvent = new CustomEvent(IGNISIGN_JS_EVENTS.IGNISIGN_LOADED);
 window.dispatchEvent(ignisignLoadedEvent);
