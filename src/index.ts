@@ -26,6 +26,16 @@ export type Ignisign_iFrameOptions = {
   width  ?: string;
   height ?: string;
 }
+export class IgnisignJS_SignatureRequest_Initialization_Params {
+  htmlElementId           : string;
+  signatureRequestId      : string;
+  signerId                : string;
+  token                   : string;
+  signerAuthSecret        : string;
+  closeOnFinish           : boolean  = true;
+  iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {};
+  iFrameOptions           : Ignisign_iFrameOptions = {}
+}
 
 export class IgnisignJs {
   private readonly  _ignisignClientSignUrl : string;
@@ -46,17 +56,18 @@ export class IgnisignJs {
     this._ignisignClientSignUrl = ignisignClientSignUrl || DEFAULT_IGNISIGN_CLIENT_SIGN_URL;
   }
 
-  public async initSignatureRequest(
-    htmlElementId           : string,
-    signatureRequestId      : string,
-    signerId                : string,
-    token                   : string,
-    signerAuthSecret        : string,
-    closeOnFinish           : boolean = true,
-    iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {},
-    iFrameOptions           : Ignisign_iFrameOptions = {}
-  ): Promise<void> {
-
+  public async initSignatureRequest(initParams: IgnisignJS_SignatureRequest_Initialization_Params): Promise<void> {
+    const {
+      htmlElementId,
+      signatureRequestId,
+      signerId,
+      token,
+      signerAuthSecret,
+      closeOnFinish,
+      iFrameMessagesCallbacks,
+      iFrameOptions
+    } = initParams;
+    
     try {
 
       if(this._htmlElementId)

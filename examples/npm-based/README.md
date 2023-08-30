@@ -1,7 +1,6 @@
-# Ignisign JS - Front End Example Application
+# Ignisign JS - Front End Example Application (NPM based)
 
-This example application demonstrates how to use Ignisign in an `embedded` mode with NPM based application.
-
+This example application demonstrates how to use Ignisign in an `embedded` mode with NPM based application using the Ignisign JS library.
 
 
 ## Prerequisites
