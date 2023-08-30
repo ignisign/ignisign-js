@@ -1,0 +1,8 @@
+
+  const appId              = "ff07df2d-538c-46eb-ad4c-4b421ede4972"; 
+  const appEnv             = "DEVELOPMENT";                            
+  const ignisign           = new IgnisignJs(appId, appEnv);
+  const authSecret         = "555c50f4-dd7f-4c4c-91a7-553f177ec2b2";
+  const signatureRequestId = "64e384cdaeb4dc33514a906b";
+  const signerId           = "64e384bdaeb4dc33514a9044";
+  const token              = "6bdWedsmQyqesG2qlcqpQZBBcPmjL50y0hZZLRx2UeGexFTPW7RvRNtqt0iirdyyR5";

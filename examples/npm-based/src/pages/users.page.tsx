@@ -10,9 +10,9 @@ import { COUNTRY_LIST } from '@ignisign/public';
 import { MyUser } from '../models/user.front.model';
 import { BiUserCircle } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { LoadingSpinner } from '../components/LoadingSpinner';
+import { LoadingSpinner } from '../components/loadingSpinner';
 import { HeaderPage } from '../components/headerPage';
-import { NoContent } from '../components/NoContent';
+import { NoContent } from '../components/noContent';
 import { useIgniSnackbar } from '../contexts/snackbar.context';
 
 const countriesDataset = COUNTRY_LIST.map(c => ({ label : c.name, value: c.code }));

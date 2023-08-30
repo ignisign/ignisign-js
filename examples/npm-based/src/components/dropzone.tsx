@@ -1,7 +1,7 @@
 
 import React, { useEffect } from "react";
 import {DropzoneOptions, useDropzone} from "react-dropzone";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { LoadingSpinner } from "./loadingSpinner";
 
 interface IDropzoneProps extends DropzoneOptions {
   files                : File[] | {fullPrivacy: boolean, file: File}[];
@@ -13,11 +13,6 @@ interface IDropzoneProps extends DropzoneOptions {
 
 export function Dropzone({ title, description, files, displayExtensions = false, isLoading = false, ...dropzoneOptions }: IDropzoneProps) {
   const {getRootProps, getInputProps} = useDropzone(dropzoneOptions);
-
-  useEffect(() => {
-    console.log('files 2', files);
-  }, [files])
-  
 
   return (
     <div className="w-full text-gray-400">

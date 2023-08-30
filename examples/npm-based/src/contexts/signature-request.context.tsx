@@ -18,7 +18,6 @@ const SignatureRequestsContextProvider = ({ children }) => {
   const getSignatureRequests = async () => {
     if(selectedSignatureProfileId){
       const sr = await ApiService.getSignatureRequests(selectedSignatureProfileId);
-      console.log('getSignatureRequests : ', sr);
       setSignatureRequests(sr);
     }
     else{
