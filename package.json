@@ -24,7 +24,7 @@
     "watch": "tsc -b -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@ignisign/public": "1.0.0"
+    "@ignisign/public": "1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.22.11",
