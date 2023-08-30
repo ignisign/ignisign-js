@@ -1,11 +1,16 @@
 node_modules
-examples/npm-based/node_modules
+./examples/npm-based/node_modules
+
 
 dist
-examples/npm-based/dist
-
-examples/standalone/data-test.txt
+./examples/npm-based/dist
 
 tsconfig.tsbuildinfo
 .npmrc
-.env
+DS_Store
+yarn-error.log
+node_modules
+
+./examples/npm-based/node_modules
+yarn-error.log
+

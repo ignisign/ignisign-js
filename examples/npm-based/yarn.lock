@@ -1458,32 +1458,21 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@ignisign/js@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ignisign/js/-/js-1.0.0.tgz#d897a4d924912764a5ea54b9e36e688c3ccdca72"
-  integrity sha512-BHoNyR8SetVe4d8FFOtpJpYpOlcT1yK92g44dTqX3gRJXJPCnMinYieNIF8XwIkG61eWXZ3F52I5oyhNaCUcow==
+"@ignisign/js@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@ignisign/js/-/js-1.0.3.tgz#b92e23354b3411d157adf6609d4fa90f1bb350b6"
+  integrity sha512-t1PG+ZYslIbCdTTKhEmYfJowm5MFRaglGQXLv/xsqbROlK6MTmve2sswmAKmbKlpXJhvqLg3hIYh4qqGj8B2/Q==
   dependencies:
-    "@ignisign/public" "1.0.0"
+    "@ignisign/public" "1.0.3"
 
-"@ignisign/public@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.0.tgz#66d0b0298e733738d04eb7e66726a21350f4b7eb"
-  integrity sha512-f7mBmjV0DFd0Y2cT5pQ+wPu62PQXg9goCAACVXKfBxLwJaKFPUFZg8Lfr/Y8/AoJq/+ubOjdBb7/EzH/A7JN9Q==
+"@ignisign/public@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.3.tgz#44229fd48e932ab693107e81ebe46d8fb9e59eae"
+  integrity sha512-ysqbWSdrMA8BLDIzqpJOWBxa6WG0Jfn7nrvX/xVRX6ik541UGqpECGKAaps1ej6bfihaP4Zlxafj8joi0Zak+g==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"
     reflect-metadata "^0.1.13"
-
-"@ignisign/sdk@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ignisign/sdk/-/sdk-1.0.0.tgz#3f6ced10d0f55a5a09e0bdc67f2a35e434473e0b"
-  integrity sha512-4clTTtfmPJzThx/vLdFKjNaVx5YzTLq4Cw38j80r2OwPg/3UusssSCI+1tAMoP92Lo0uWrAoyTibxhXGKxSgVw==
-  dependencies:
-    "@ignisign/public" "1.0.0"
-    axios "^0.21.1"
-    form-data "^4.0.0"
-    typescript "^4.1.3"
-    uuid "^8.3.0"
 
 "@ionic/cli-framework-output@^2.2.1":
   version "2.2.6"
@@ -5950,15 +5939,6 @@ form-data@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
   integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
-  dependencies:
-    asynckit "^0.4.0"
-    combined-stream "^1.0.8"
-    mime-types "^2.1.12"
-
-form-data@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
-  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
@@ -12245,7 +12225,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typescript@^4.1.2, typescript@^4.1.3:
+typescript@^4.1.2:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==

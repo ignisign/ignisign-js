@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useHistory } from "react-router";
-import { AppRoutesService } from '../_core/remote/app-routes.service';
 import { Input } from '../components/input';
 import { useForm } from 'react-hook-form';
 import MultiSelect from '../components/multiselect';
@@ -12,6 +11,7 @@ import FormWrapper from '../components/formWrapper';
 import { Dropzone } from '../components/dropzone';
 import { IGNISIGN_DOCUMENT_TYPE } from '@ignisign/public';
 import { useIgniSnackbar } from '../contexts/snackbar.context';
+import { FrontUrlProvider } from '../utils/front-url-provider';
 
 const SignatureRequestCreationPage = () => {
   const { notifyError }                                        = useIgniSnackbar();
@@ -53,7 +53,7 @@ const SignatureRequestCreationPage = () => {
 
       try {
         await createSignatureRequest(data);
-        history.replace(AppRoutesService.signatureRequestsPage());
+        history.replace(FrontUrlProvider.signatureRequestsPage());
       } catch (error) {
         console.error(error);        
         notifyError('Failed to create signature request');
@@ -80,60 +80,60 @@ const SignatureRequestCreationPage = () => {
     <>
       <HeaderPage title='Create a file signature instance'/>
 
-    <div className='max-w-lg'> {/*  mx-auto border border-gray-600 shadow-lg rounded px-5 py-3 mt-5 */}
+      <div className='max-w-lg'>
 
-      <FormWrapper form={form} 
-        confirm={{
-          label    : 'Submit',
-          onClick  : submit,
-          disabled : !selectedSignatureProfileId,
-          loading  : isLoading
-        }}
-        cancel={{
-          label    : 'Cancel',
-          disabled : isLoading,
-          onClick  : () => history.replace(AppRoutesService.signatureRequestsPage()),
-        }}
-      >
-        <div className='w-full flex flex-col gap-3'>
-          <div>
-            <Input form={form} label='Title' name='title'/>
-          </div>
-
-          {selectedSignatureProfile?.documentTypes?.includes(IGNISIGN_DOCUMENT_TYPE.PRIVATE_FILE) ?
-            <Dropzone
-              title="Full privacy files"
-              onDrop={async files => handleFileChange(files)}
-              files={selectedFiles}
-              maxFiles={1}
-              multiple={false}
-            /> :
-            
-            <Dropzone
-              title="Files"
-              onDrop={async files => handleFileChange(files)}
-              files={selectedFiles}
-              maxFiles={1}
-              multiple={false}
-            />
-          }
-
-          <MultiSelect 
-            form={form} label='Users' name='users'
-            datas={users.map(u=>({
-              id    : u._id,
-              value : `${u.firstName} ${u.lastName}` 
-            }))} 
-          />
-
-          {(isDirty && !selectedFiles) &&
-            <div className='text-red-500'>
-              At least one file is required
+        <FormWrapper form={form} 
+          confirm={{
+            label    : 'Submit',
+            onClick  : submit,
+            disabled : !selectedSignatureProfileId,
+            loading  : isLoading
+          }}
+          cancel={{
+            label    : 'Cancel',
+            disabled : isLoading,
+            onClick  : () => history.replace(FrontUrlProvider.signatureRequestsPage()),
+          }}
+        >
+          <div className='w-full flex flex-col gap-3'>
+            <div>
+              <Input form={form} label='Title' name='title'/>
             </div>
-          }
-        </div>
-      </FormWrapper>
-    </div>
+
+            {selectedSignatureProfile?.documentTypes?.includes(IGNISIGN_DOCUMENT_TYPE.PRIVATE_FILE) ?
+              <Dropzone
+                title="Full privacy files"
+                onDrop={async files => handleFileChange(files)}
+                files={selectedFiles}
+                maxFiles={1}
+                multiple={false}
+              /> :
+              
+              <Dropzone
+                title="Files"
+                onDrop={async files => handleFileChange(files)}
+                files={selectedFiles}
+                maxFiles={1}
+                multiple={false}
+              />
+            }
+
+            <MultiSelect 
+              form={form} label='Users' name='users'
+              datas={users.map(u=>({
+                id    : u._id,
+                value : `${u.firstName} ${u.lastName}` 
+              }))} 
+            />
+
+            {(isDirty && !selectedFiles) &&
+              <div className='text-red-500'>
+                At least one file is required
+              </div>
+            }
+          </div>
+        </FormWrapper>
+      </div>
   </>
   )
 }

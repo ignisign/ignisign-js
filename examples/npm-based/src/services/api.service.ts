@@ -1,33 +1,15 @@
 
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { MySignatureRequestSigners } from "../models/signature-request.front.model";
 
-const urls = {
-  signatureRequest: '/v1/signature-requests',
-  signatureProfiles: '/v1/signature-profiles',
-  users: '/v1/users',
-  getPrivateFileUrl: '/v1/files'
-}
+const APP_BACKEND_ENDPOINT = process.env.REACT_APP_BACKEND_ENDPOINT || "http://localhost:4242"
 
-const getUrl = (url, params = null) => {
-  return `${process.env.REACT_APP_BACKEND_ENDPOINT}${url}${params ? `/${params}` : ''}`
-}
-
-type Options = {
-  urlParams?: any
-  headers?: any
-}
+const getUrl = (url) => `${APP_BACKEND_ENDPOINT}${url}}`
 
 const http = {
-  post: async (url, body, options: Options = {}) => {
-    return (await axios.post(getUrl(url), body, options)).data
-  },
-  get: async (url, options: Options = {}) => {
-    return (await axios.get(getUrl(url), options)).data
-  },
-  delete: async (url, options: Options = {}) => {
-    return (await axios.delete(getUrl(url), options)).data
-  }
+  post    : async (url, body, options: AxiosRequestConfig = {}) => (await axios.post(getUrl(url), body, options))?.data,
+  get     : async (url, options: AxiosRequestConfig = {})       => (await axios.get(getUrl(url), options))?.data,
+  delete  : async (url, options: AxiosRequestConfig = {})       => (await axios.delete(getUrl(url), options))?.data
 }
 
 export const ApiService = {
@@ -42,11 +24,31 @@ export const ApiService = {
 }
 
 async function getPrivateFileUrl(documentHash){
-  return http.get(`${urls.getPrivateFileUrl}/${documentHash}`)
+  return http.get(`/v1/files/${documentHash}`)
 }
 
 async function getSignatureProfiles(){
-  return http.get(urls.signatureProfiles)
+  return http.get("/v1/signature-profiles")
+}
+
+async function getSignatureRequests(signatureProfileId) {
+  return http.get(`/v1/signature-profiles/${signatureProfileId}/signature-requests`)
+}
+
+async function getSignatureRequestSigners(signatureRequestId): Promise<MySignatureRequestSigners>{
+  return http.get(`/v1/signature-requests/${signatureRequestId}`)
+}
+
+async function addUser(signatureProfileId, body) {
+  return http.post(`/v1/signature-profiles/${signatureProfileId}/users`, body)
+}
+
+async function getUsers() {
+  return http.get(`/v1/users`)
+}
+
+async function deleteUser(userId) {
+  return http.delete(`/v1/users/${userId}`)
 }
 
 async function createSignatureRequest(signatureProfileId, body: {title, usersIds, files}){
@@ -63,25 +65,7 @@ async function createSignatureRequest(signatureProfileId, body: {title, usersIds
     formData.append(`fullPrivacy[${i}]`, fullPrivacy.toString())
   });
 
-  return http.post(`${urls.signatureProfiles}/${signatureProfileId}/signature-requests`, formData, {urlParams: {signatureProfileId}, headers: {'Content-Type': 'multipart/form-data'}})
-}
-
-async function getSignatureRequests(signatureProfileId) {
-  return http.get(`${urls.signatureProfiles}/${signatureProfileId}/signature-requests`)
-}
-
-async function getSignatureRequestSigners(signatureRequestId): Promise<MySignatureRequestSigners>{
-  return http.get(`${urls.signatureRequest}/${signatureRequestId}`)
-}
-
-async function addUser(signatureProfileId, body) {
-  return http.post(`${urls.signatureProfiles}/${signatureProfileId}/users`, body)
-}
-
-async function getUsers() {
-  return http.get(`${urls.users}`)
-}
-
-async function deleteUser(userId) {
-  return http.delete(`${urls.users}/${userId}`)
+  return http.post(`/v1/signature-profiles/${signatureProfileId}/signature-requests`,
+    formData, 
+    { headers: {'Content-Type': 'multipart/form-data'} })
 }

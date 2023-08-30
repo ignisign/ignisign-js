@@ -1,12 +1,11 @@
-import { Button } from '../components/button';
 import { useHistory } from "react-router";
-import { AppRoutesService } from '../_core/remote/app-routes.service';
 import { useSignatureRequests } from '../contexts/signature-request.context';
 import { useSignatureProfiles } from '../contexts/signature-profile.context';
 import { HeaderPage } from '../components/headerPage';
 import { NoContent } from '../components/NoContent';
 import { MySignatureRequest } from '../models/signature-request.front.model';
 import { FaFileSignature } from "react-icons/fa";
+import { FrontUrlProvider } from '../utils/front-url-provider';
 
 const SignatureRequestsPage = () => {
   const history                      = useHistory();
@@ -20,7 +19,7 @@ const SignatureRequestsPage = () => {
         title='Signature requests'
         action={signatureRequests?.length === 0 ? null : {
           label: 'Create a signature request',
-          onClick: () => history.push(AppRoutesService.signatureRequestCreationPage()),
+          onClick: () => history.push(FrontUrlProvider.signatureRequestCreationPage()),
           disabled: !selectedSignatureProfileId
         }}
       />
@@ -32,7 +31,7 @@ const SignatureRequestsPage = () => {
             description='Create a signature request to start using Ignisign'
             button={{
               label: 'Create a signature request',
-              onClick: () => history.push(AppRoutesService.signatureRequestCreationPage()),
+              onClick: () => history.push(FrontUrlProvider.signatureRequestCreationPage()),
             }}
           /> :
           <div className='flex flex-col gap-3 w-full'>
@@ -55,7 +54,7 @@ interface ISignatureRequestItemProps {
 const SignatureRequestItem = ({signatureRequest} : ISignatureRequestItemProps) => {
   const history = useHistory();
 
-  const openSignatureRequest = () => history.push(AppRoutesService.signatureRequestsDetailPage(signatureRequest.signatureRequestId));
+  const openSignatureRequest = () => history.push(FrontUrlProvider.signatureRequestsDetailPage(signatureRequest.signatureRequestId));
 
   return (
     <div className='cursor-pointer shadow bg-gray-900 rounded px-3 py-2 flex gap-3 items-center' onClick={openSignatureRequest}>
