@@ -59,7 +59,7 @@ enum IGNISIGN_APPLICATION_ENV {
 }
 ```
 
-# Initialize a signature request.
+## Initialize a signature request.
 
 To initialize a signature request, you need to call the `initSignatureRequest` method of the `ignisignJs` object you created before.
 
@@ -91,8 +91,6 @@ const handleSignatureRequestFinalized = async (
 
 // OPTIONAL 
 //This method must be implemented if the signature profile linked to the signature request is configured to use a private files.
-
-
 const handlePrivateFileInfoProvisioning = async (
     
     documentId          : string,   // The id of the document to sign
@@ -125,18 +123,19 @@ const initParams: IgnisignJS_SignatureRequest_Initialization_Params = {
   signerId            : "6490205421ac0f001cace47e", // The id of the signer - this value is provided to your backend by webhook when the signature request is created
   token               : "6490205421ac2f001cace77e6490205421ac2f001cace77e6490205421ac2f001cace77e", // The unique token that allows you to access to the signature request for the signer - This value is provided to your backend by webhook when the signature request is created
   signerAuthSecret    : "6490205421ac0f001cace47e" , // The secret that allows you to authenticate the signer - This value is provided to your backend by webhook when the signer is created
-  closeOnFinish       : true, // If true, the signature request iframe will be closed automatically in case of finalization or error 
+  closeOnFinish       : true, // OPTIONAL - default true - If true, the signature request iframe will be closed automatically in case of finalization or error 
   iFrameMessagesCallbacks : { // The callbacks that will be called when the signature request iframe send a message to the parent window
     handleSignatureRequestError,
     handleSignatureRequestFinalized,
     handlePrivateFileInfoProvisioning,
   }
-  iFrameOptions : { // The options that will be used to configure the signature request iframe
+  iFrameOptions : { // OPTIONAL - The options that will be used to configure the signature request iframe
     width: "100%",
     height: "500px",
   }
-
 }
+
+await ignisignJs.initSignatureRequest(initParams);
 
 ```
 
@@ -144,6 +143,17 @@ const initParams: IgnisignJS_SignatureRequest_Initialization_Params = {
 - **Private files** Documentation : [https://doc.ignisign.io/#tag/Private-Files](https://doc.ignisign.io/#tag/Private-Files)
 - Explaination of the **Signature Profile** Principle : [https://doc.ignisign.io/#tag/Signature-Profiles](https://doc.ignisign.io/#tag/Signature-Profiles)
 - **Webhook** Documentation : [https://doc.ignisign.io/#tag/Webhooks](https://doc.ignisign.io/#tag/Webhooks)
+
+
+## Close a Signature Request
+
+If you want to close a signature request before the end of the process managed by Ignisign, you can call the `closeSignatureRequest` method of the `ignisignJs` object you created before.
+
+```typescript
+ignisignJs.closeSignatureRequest();
+```
+
+
 
 
 

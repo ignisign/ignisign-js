@@ -21,7 +21,6 @@ export enum IGNISIGN_JS_EVENTS {
 export type Ignisign_InitSignatureRequestCallback = {
   handlePrivateFileInfoProvisioning   ?: (documentId: string, externalDocumentId: string, signerId : string, signatureRequestId: string) => Promise<IgnisignPrivateFileDto>;
   handleSignatureRequestError         ?: (errorCode: IGNISIGN_ERROR_CODES, errorContext: any, signerId: string, signatureRequestId: string) => Promise<void>;
-  handleSignatureRequestCancellation  ?: (signerId: string, signatureRequestId: string) => Promise<void>;
   handleSignatureRequestFinalized     ?: (signatureIds: string[], signerId: string, signatureRequestId: string) => Promise<void>;
 }
 
@@ -37,7 +36,7 @@ export class IgnisignJS_SignatureRequest_Initialization_Params {
   signerAuthSecret        : string;
   closeOnFinish           : boolean  = true;
   iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {};
-  iFrameOptions           : Ignisign_iFrameOptions = {}
+  iFrameOptions           : Ignisign_iFrameOptions = { width: "100%", height: "500px" }
 }
 
 export class IgnisignJs {
@@ -129,7 +128,11 @@ export class IgnisignJs {
     }
   }
 
-  public closeIframe(): void {
+  public cancelSignatureRequest(): void {
+    this._closeIframe();
+  }
+
+  private _closeIframe(): void {
     if(!this._htmlElementId)
       throw new Error(`[ERROR][IgnisignJS]: No signature request initialized`);
 
@@ -154,7 +157,6 @@ export class IgnisignJs {
     this._iframeResizeObserver = null;
   }
 
-
   private _finalizeSignatureRequest(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED): void {
     if(!infos?.data?.signatureIds )
       throw new Error(`event data malformed`);
@@ -167,7 +169,7 @@ export class IgnisignJs {
       );
 
     if(this._closeOnFinish)
-      this.closeIframe();
+      this._closeIframe();
   }
 
   private _manageSignatureRequestError(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR): void {
@@ -183,7 +185,7 @@ export class IgnisignJs {
       );
 
     if(this._closeOnFinish)
-      this.closeIframe();
+      this._closeIframe();
   }
 
   private async _managePrivateFileInfoProvisioning(infos: IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE): Promise<IgnisignPrivateFileDto> {
