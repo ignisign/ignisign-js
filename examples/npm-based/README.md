@@ -5,7 +5,7 @@ This example application demonstrates how to use Ignisign in an `embedded` mode 
 
 ## Prerequisites
 
-- NodeJS > 16.0.0
+- NodeJS > 18.0.0
 - NPM/Yarn
 
 this example application is linked to a a demo Backend application. 

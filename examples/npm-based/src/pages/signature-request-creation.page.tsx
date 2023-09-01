@@ -47,7 +47,8 @@ const SignatureRequestCreationPage = () => {
       const data = {
         title: values.title,
         usersIds: values.users,
-        files: selectedFiles
+        files: selectedFiles,
+
       };
       setIsLoading(true);
 
@@ -55,8 +56,7 @@ const SignatureRequestCreationPage = () => {
         await createSignatureRequest(data);
         history.replace(FrontUrlProvider.signatureRequestsPage());
       } catch (error) {
-        console.error(error);        
-        notifyError('Failed to create signature request');
+        notifyError(error?.response?.data?.message ?? 'Failed to create signature request');
       } finally {
         setIsLoading(false);
       }
@@ -101,7 +101,7 @@ const SignatureRequestCreationPage = () => {
             {selectedSignatureProfile?.documentTypes?.includes(IGNISIGN_DOCUMENT_TYPE.PRIVATE_FILE) ?
               <Dropzone
                 title="Full privacy files"
-                onDrop={async files => handleFileChange(files)}
+                onDrop={async files => handleFileChange(files, true)}
                 files={selectedFiles}
                 maxFiles={1}
                 multiple={false}

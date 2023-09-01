@@ -4,7 +4,7 @@ import { MySignatureRequestSigners } from "../models/signature-request.front.mod
 
 const APP_BACKEND_ENDPOINT = process.env.REACT_APP_BACKEND_ENDPOINT || "http://localhost:4242"
 
-const getUrl = (url) => `${APP_BACKEND_ENDPOINT}${url}}`
+const getUrl = (url) => `${APP_BACKEND_ENDPOINT}${url}`
 
 const http = {
   post    : async (url, body, options: AxiosRequestConfig = {}) => (await axios.post(getUrl(url), body, options))?.data,

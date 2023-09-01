@@ -53,7 +53,7 @@ interface ISignatureRequestItemProps {
 const SignatureRequestItem = ({signatureRequest} : ISignatureRequestItemProps) => {
   const history = useHistory();
 
-  const openSignatureRequest = () => history.push(FrontUrlProvider.signatureRequestsDetailPage(signatureRequest.signatureRequestId));
+  const openSignatureRequest = () => history.push(FrontUrlProvider.signatureRequestsDetailPage(signatureRequest._id));
 
   return (
     <div className='cursor-pointer shadow bg-gray-900 rounded px-3 py-2 flex gap-3 items-center' onClick={openSignatureRequest}>
