@@ -1,5 +1,3 @@
-# Ignisign JS
-
 This is the library that can be used to integrate the Ignisign signature into your application.
 
 This integration mode is called `embedded` mode. 
