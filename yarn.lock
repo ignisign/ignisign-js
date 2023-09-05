@@ -974,10 +974,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@ignisign/public@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.11.tgz#75667d379846b48619d763afaa6681057723c5b8"
-  integrity sha512-nHFhOrlu8s+JQ6+j28iIvKKp2DRLeHNkwnAwf90ZD88Pqyb4/zQpnSpozgf9rPNSLp1ifqL4it621s060jnaDw==
+"@ignisign/public@1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.12.tgz#a1af98d26655425f4320b54d6d376a85762c80a2"
+  integrity sha512-2XCZMlyu+AMEGV6TsrtnqfUYHaAi0EWDBuYcFWQ4SsYaRSQhHluq9h1Gez3z4Sj/H2+vFhugxRISfqDsaukpAg==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"
@@ -1345,9 +1345,9 @@ call-bind@^1.0.0:
     get-intrinsic "^1.0.2"
 
 caniuse-lite@^1.0.30001517:
-  version "1.0.30001525"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001525.tgz#d2e8fdec6116ffa36284ca2c33ef6d53612fe1c8"
-  integrity sha512-/3z+wB4icFt3r0USMwxujAqRvaD/B7rvGTsKhbhSQErVrJvkZCLhgNLJxU8MevahQVH6hCU9FsHdNUFbiwmE7Q==
+  version "1.0.30001526"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001526.tgz#cc9742f7f191706f63dc20b5c83acc8d4858f61b"
+  integrity sha512-0UAJj+6ga1IzMcKB6PbNPEXuIpYffmiZL6Innn03+3fX1lm8P70cfAHzD7jekkYj+lMs5vB1iWCRXf3fS1GW8A==
 
 chalk@^2.4.2:
   version "2.4.2"
