@@ -1,7 +1,7 @@
 export type MySignatureRequest = {
   _id                 ?: string;
   title               ?: string;
-  signatureRequestId  ?: string;
+  signatureProfileId  ?: string;
 }
 
 export type MySignatureRequestSigners = {

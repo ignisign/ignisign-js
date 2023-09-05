@@ -1,6 +1,6 @@
 {
   "name": "@ignisign/js",
-  "version": "1.0.5",
+  "version": "1.0.11",
   "license": "MIT",
   "private": false,
   "files": [
@@ -16,6 +16,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
+    "serve-dist": "http-server ./dist -p 8080",
     "build": "tsc -b",
     "build-webpack": "webpack --config webpack.config.js",
     "lint": "eslint ./src --ext .ts,.tsx",
@@ -24,9 +25,11 @@
     "watch": "tsc -b -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@ignisign/public": "1.0.6"
+    "@ignisign/public": "1.0.11"
+    
   },
   "devDependencies": {
+    "http-server": "^14.1.1",
     "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-typescript": "^7.22.11",

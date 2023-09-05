@@ -13,7 +13,7 @@ import { MySignatureRequest, Signer } from '../models/signature-request.front.mo
 import { BiUserCircle } from "react-icons/bi";
 import { HiArrowNarrowRight } from "react-icons/hi";
 
-const IGNISIGN_CLIENT_SIGN_URL = process.env.REACT_IGNISIGN_CLIENT_SIGN_URL || 'https://sign.ignisign.io';
+const IGNISIGN_CLIENT_SIGN_URL = process.env.REACT_APP_IGNISIGN_CLIENT_SIGN_URL || 'https://sign.ignisign.io';
 
 const SignatureRequestsDetailPage = () => {
   const history                                            = useHistory();
@@ -21,16 +21,16 @@ const SignatureRequestsDetailPage = () => {
   const { users }                                          = useUsers();
   const { signatureRequests }                              = useSignatureRequests();
   const { selectedSignatureProfileId }                     = useSignatureProfiles();
-  const { signatureRequestId }                             = useParams<{ signatureRequestId: string }>();
+  const { signatureRequestId: internalSignatureRequestId } = useParams<{ signatureRequestId: string }>();
   const [userSelectToSign, setUserSelectToSign]            = useState<Signer>(null);
   const [, setIsDemmoSnackbarOpen, isDemmoSnackbarOpenRef] = useStateWithRef(false);
   const [signatureRequest, setSignatureRequest]            = useState<MySignatureRequest>();
   const [signers, setSigners]                              = useState<Signer[]>([]);
-
+  const [signatureRequestId, setSignatureRequestId]        = useState<string>()
 
   const getSignatureRequestUsers = async (signatureRequestId) => {
     const sr = await ApiService.getSignatureRequestSigners(signatureRequestId);
-
+    setSignatureRequestId(sr?.signatureRequestId)
     const signers = sr?.signers?.map(({myUserId, signerId, token}) => {
       const user = users.find(u => u._id.toString() === myUserId);
 
@@ -53,8 +53,8 @@ const SignatureRequestsDetailPage = () => {
   }
   
   useEffect(() => {
-    setSignatureRequest(signatureRequests.find(e => e.signatureRequestId === signatureRequestId));
-    getSignatureRequestUsers(signatureRequestId);
+    setSignatureRequest(signatureRequests.find(e => e._id?.toString() === internalSignatureRequestId));
+    getSignatureRequestUsers(internalSignatureRequestId);
   }, [users])
 
   const SignerItem = ({ signer } : { signer: Signer }) => (
@@ -149,15 +149,21 @@ const EmbeddedSignature = ({signatureRequestId, signerId, token, authSecret}) =>
         authSecret,
       });
 
-      ignisign.initSignatureRequest(
-        'test-ignisign-sdk',
-        signatureRequestId,
-        signerId, 
-        token,
-        authSecret,
-        true,
-        { handlePrivateFileInfoProvisioning },
-        { width:"100%", height:"710" }
+      ignisign.initSignatureRequest({
+          signerId,
+          signatureRequestId,
+          closeOnFinish: true,
+          token,
+          signerAuthSecret: authSecret,
+          iFrameMessagesCallbacks:{
+            handlePrivateFileInfoProvisioning
+          },
+          htmlElementId: 'test-ignisign-sdk',
+          iFrameOptions: {
+            width:"100%",
+            height:"710"
+          }
+        }
       );
       
     } catch (e) {
