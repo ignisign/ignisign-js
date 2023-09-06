@@ -7,7 +7,7 @@ import { useSignatureRequests } from '../contexts/signature-request.context';
 import { useSignatureProfiles } from '../contexts/signature-profile.context';
 import { Snackbar } from '@mui/material';
 import { useStateWithRef } from '../utils/useStateWithRef';
-import { IGNISIGN_APPLICATION_ENV, IgnisignPrivateFileDto } from '@ignisign/public';
+import { IGNISIGN_APPLICATION_ENV, IgnisignDocument_PrivateFileDto } from '@ignisign/public';
 import { IgnisignJs } from '@ignisign/js';
 import { MySignatureRequest, Signer } from '../models/signature-request.front.model';
 import { BiUserCircle } from "react-icons/bi";
@@ -128,7 +128,7 @@ const EmbeddedSignature = ({signatureRequestId, signerId, token, authSecret}) =>
       start();
     }, [])
     
-  const handlePrivateFileInfoProvisioning = async (documentId) : Promise<IgnisignPrivateFileDto> => {
+  const handlePrivateFileInfoProvisioning = async (documentId) : Promise<IgnisignDocument_PrivateFileDto> => {
     const url = await ApiService.getPrivateFileUrl(documentId);
     return url;
   }

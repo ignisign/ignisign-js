@@ -1,19 +1,19 @@
 
-import { Ignisign_SignatureProfile } from "@ignisign/public";
+import { IgnisignSignatureProfile } from "@ignisign/public";
 import { useState, createContext, useContext, useEffect } from "react";
 import { ApiService } from "../services/api.service";
 
 export interface ISignatureProfilesContext {
-  signatureProfiles             : Ignisign_SignatureProfile[];
+  signatureProfiles             : IgnisignSignatureProfile[];
   doSelectSignatureProfile      : (signatureProfileId) => void;
-  selectedSignatureProfile      : Ignisign_SignatureProfile;
+  selectedSignatureProfile      : IgnisignSignatureProfile;
   selectedSignatureProfileId    : string;
 }
 
 const SignatureProfilesContext = createContext<ISignatureProfilesContext>( {} as ISignatureProfilesContext);
 
 const SignatureProfilesContextProvider = ({ children }) => {
-  const [signatureProfiles, setSignatureProfiles]                      = useState<Ignisign_SignatureProfile[]>([]);
+  const [signatureProfiles, setSignatureProfiles]                      = useState<IgnisignSignatureProfile[]>([]);
   const [selectedSignatureProfile, setSelectedSignatureProfile]        = useState(null);
   const [selectedSignatureProfileId, setSelectedSignatureProfileId]    = useState(null);
 
