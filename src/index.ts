@@ -5,7 +5,7 @@ import {
   IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE,
   IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR,
   IGNISIGN_ERROR_CODES,
-  IgnisignPrivateFileDto,
+  IgnisignDocument_PrivateFileDto,
   IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED
 } from "@ignisign/public";
 
@@ -19,7 +19,7 @@ export enum IGNISIGN_JS_EVENTS {
 }
 
 export type Ignisign_InitSignatureRequestCallback = {
-  handlePrivateFileInfoProvisioning   ?: (documentId: string, externalDocumentId: string, signerId : string, signatureRequestId: string) => Promise<IgnisignPrivateFileDto>;
+  handlePrivateFileInfoProvisioning   ?: (documentId: string, externalDocumentId: string, signerId : string, signatureRequestId: string) => Promise<IgnisignDocument_PrivateFileDto>;
   handleSignatureRequestError         ?: (errorCode: IGNISIGN_ERROR_CODES, errorContext: any, signerId: string, signatureRequestId: string) => Promise<void>;
   handleSignatureRequestFinalized     ?: (signatureIds: string[], signerId: string, signatureRequestId: string) => Promise<void>;
 }
@@ -188,7 +188,7 @@ export class IgnisignJs {
       this._closeIframe();
   }
 
-  private async _managePrivateFileInfoProvisioning(infos: IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE): Promise<IgnisignPrivateFileDto> {
+  private async _managePrivateFileInfoProvisioning(infos: IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE): Promise<IgnisignDocument_PrivateFileDto> {
     if(!infos?.data?.documentId)
       throw new Error(`event data malformed`);
 
@@ -216,7 +216,7 @@ export class IgnisignJs {
       switch (type) {
         case IGNISIGN_BROADCASTABLE_ACTIONS.NEED_PRIVATE_FILE_URL:
           
-          const dto : IgnisignPrivateFileDto = await this._managePrivateFileInfoProvisioning({ type, data });
+          const dto : IgnisignDocument_PrivateFileDto = await this._managePrivateFileInfoProvisioning({ type, data });
 
           const iframeElement = document.querySelector<HTMLIFrameElement>(`#${this._iFrameId}`);
   
