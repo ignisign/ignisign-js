@@ -974,10 +974,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@ignisign/public@1.0.32":
-  version "1.0.32"
-  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.32.tgz#62e12bb10dd28a1432ac69357fde70249580ac3f"
-  integrity sha512-Nw2XkpG7DkEf+kwtvFCw12dPOt3urMLO6UDkXfPPPyHpYdH1JxD+K2PlIPAnXNu8TXLwuHFl71mPZAkFW2pZIg==
+"@ignisign/public@1.0.33":
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/@ignisign/public/-/public-1.0.33.tgz#f75811583821dbbf9689a904912f0b26509b6420"
+  integrity sha512-KOD9t4f5SQrf6/DlsjNiWytZspjmRgzNV8XFEyvia4T13ljAo/5gCIlqZQs2A/q6cXT9FTdxRvkknNPmcTJkzA==
   dependencies:
     class-transformer "^0.3.1"
     class-validator "^0.13.1"
