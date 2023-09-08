@@ -1,9 +1,6 @@
 node_modules
-./examples/npm-based/node_modules
-
-
+./examples/**
 dist
-./examples/npm-based/dist
 
 tsconfig.tsbuildinfo
 .npmrc
@@ -11,6 +8,6 @@ DS_Store
 yarn-error.log
 node_modules
 
-./examples/npm-based/node_modules
+npm-based/node_modules
 yarn-error.log
 
