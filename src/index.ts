@@ -1,13 +1,32 @@
-import {
-  IGNISIGN_APPLICATION_ENV,
+// import {
+  // IGNISIGN_APPLICATION_ENV,
+  // IGNISIGN_BROADCASTABLE_ACTIONS,
+  // IGNISIGN_BROADCASTABLE_ACTIONS_TYPE,
+  // IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE,
+  // IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR,
+  // IGNISIGN_ERROR_CODES,
+  // IgnisignDocument_PrivateFileDto,
+  // IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED
+// } from "@ignisign/public";
+
+// import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+
+// import path from 'path';
+// const __dirname = path.resolve();
+
+import {IGNISIGN_ERROR_CODES } from "@ignisign/public/dist/_commons/ignisign-errors.public";
+import {  
   IGNISIGN_BROADCASTABLE_ACTIONS,
   IGNISIGN_BROADCASTABLE_ACTIONS_TYPE,
   IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE,
-  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR,
-  IGNISIGN_ERROR_CODES,
-  IgnisignDocument_PrivateFileDto,
-  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED
-} from "@ignisign/public";
+  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR, 
+  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED 
+} from "@ignisign/public/dist/signatures/broadcastable-action.public";
+
+import {IgnisignDocument_PrivateFileDto} from "@ignisign/public/dist/documents/document-content.public";
+
+import {IGNISIGN_APPLICATION_ENV} from "@ignisign/public/dist/applications/applications.public";
 
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
 const IFRAME_MIN_WIDTH  = 300; 

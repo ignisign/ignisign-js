@@ -1,6 +1,7 @@
 node_modules
 ./examples/**
 dist
+./dist-standalone/**
 
 tsconfig.tsbuildinfo
 .npmrc

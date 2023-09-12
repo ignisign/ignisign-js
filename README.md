@@ -18,20 +18,27 @@ You can install the library using npm.
 npm install @ignisign/ignisign-js
 ```
 
-It's also possibile to integrate the library using a script tag in a standalone means
+We suggest your to also install `@ignisign/public` package into your application. This package contains all types that are used by the library.
+Although it is a transitive dependancy from "@ignisign/ignisign-js", and consequently it's not mandatory to install it, it will help you to have a better experience with the library, expecially regarding import mecanism of your IDE (Indeed, IDE do not resolve automatically dependancies import from  transitives dependancies)
+
+```bash
+npm install @ignisign/public
+```
+
+<!-- It's also possibile to integrate the library using a script tag in a standalone means
 
 ```html
 <script src="https://ignisign.io/assets/ignisign-js.min.js"></script>
 ```
 
-You also need an Ignisign account. You can create one [here](https://console.ignisign.io/signup). Do not hesitate it's Free ! :)
+You also need an Ignisign account. You can create one [here](https://console.ignisign.io/signup). Do not hesitate it's Free ! :) -->
 
 
 ## Examples
 
 2 integrations examples are available to show how the interaction with can be used.
 
-You can find these examples [here](https://github.com/ignisign/ignisign-js/tree/main/examples/npm-based) and [here](https://github.com/ignisign/ignisign-js/tree/main/examples/standalone)
+You can find these examples [here](https://github.com/ignisign/ignisign-examples/tree/main/ignisign-js-npm-based) and [here](https://github.com/ignisign/ignisign-examples/tree/main/ignisign-js-standalone)
 
 ## Usage
 
