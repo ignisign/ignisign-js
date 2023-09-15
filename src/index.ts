@@ -1,12 +1,12 @@
 import {
   IGNISIGN_APPLICATION_ENV,
   IGNISIGN_BROADCASTABLE_ACTIONS,
-  IGNISIGN_BROADCASTABLE_ACTIONS_TYPE,
-  IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE,
-  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR,
+  IgnisignBroadcastableAction_Dto,
+  IgnisignBroadcastableAction_PrivateFileRequestDto,
+  IgnisignBroadcastableAction_SignatureErrorDto,
   IGNISIGN_ERROR_CODES,
   IgnisignDocument_PrivateFileDto,
-  IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED
+  IgnisignBroadcastableAction_SignatureFinalizedDto
 } from "@ignisign/public";
 
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
@@ -157,7 +157,7 @@ export class IgnisignJs {
     this._iframeResizeObserver = null;
   }
 
-  private _finalizeSignatureRequest(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_FINALIZED): void {
+  private _finalizeSignatureRequest(infos: IgnisignBroadcastableAction_SignatureFinalizedDto): void {
     if(!infos?.data?.signatureIds )
       throw new Error(`event data malformed`);
 
@@ -172,7 +172,7 @@ export class IgnisignJs {
       this._closeIframe();
   }
 
-  private _manageSignatureRequestError(infos: IGNISIGN_BROADCASTABLE_ACTIONS_SIGNATURE_ERROR): void {
+  private _manageSignatureRequestError(infos: IgnisignBroadcastableAction_SignatureErrorDto): void {
     if(!infos?.data?.errorCode)
       throw new Error(`event data malformed`);
 
@@ -188,7 +188,7 @@ export class IgnisignJs {
       this._closeIframe();
   }
 
-  private async _managePrivateFileInfoProvisioning(infos: IGNISIGN_BROADCASTABLE_ACTIONS_NEED_PRIVATE_FILE): Promise<IgnisignDocument_PrivateFileDto> {
+  private async _managePrivateFileInfoProvisioning(infos: IgnisignBroadcastableAction_PrivateFileRequestDto): Promise<IgnisignDocument_PrivateFileDto> {
     if(!infos?.data?.documentId)
       throw new Error(`event data malformed`);
 
@@ -203,7 +203,7 @@ export class IgnisignJs {
     );
   }
 
-  private async _handleEvent (event: MessageEvent<IGNISIGN_BROADCASTABLE_ACTIONS_TYPE>): Promise<void> {
+  private async _handleEvent (event: MessageEvent<IgnisignBroadcastableAction_Dto>): Promise<void> {
 
     try {
       console.debug('[DEBUG][IgnisignJS]: _handleEvent : ', event);
@@ -211,7 +211,7 @@ export class IgnisignJs {
       if(!event?.data?.type || !event?.data?.data)
         throw new Error(`event malformed`);
 
-      const { type, data } : IGNISIGN_BROADCASTABLE_ACTIONS_TYPE = event.data;
+      const { type, data } : IgnisignBroadcastableAction_Dto = event.data;
       
       switch (type) {
         case IGNISIGN_BROADCASTABLE_ACTIONS.NEED_PRIVATE_FILE_URL:
@@ -260,7 +260,7 @@ export class IgnisignJs {
             this._signerId,
             this._signatureRequestId);
       } else {
-        const { type, data }: IGNISIGN_BROADCASTABLE_ACTIONS_TYPE = event.data;
+        const { type, data }: IgnisignBroadcastableAction_Dto = event.data;
         console.error(`${baseMsg}: ${type}`, data, e);
         if(this._iFrameMessagesCallbacks?.handleSignatureRequestError)
           this._iFrameMessagesCallbacks.handleSignatureRequestError(

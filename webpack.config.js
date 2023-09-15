@@ -30,12 +30,5 @@ module.exports = {
       },
     ],
   },
- /*  plugins: [
-    new webpack.ProvidePlugin({
-      IGNISIGN_APPLICATION_ENV: ['@ignisign/public', 'IGNISIGN_APPLICATION_ENV'],
-      IGNISIGN_BROADCASTABLE_ACTIONS: ['@ignisign/public', 'IGNISIGN_BROADCASTABLE_ACTIONS'],
-      IGNISIGN_BROADCASTABLE_ACTIONS_TYPE: ['@ignisign/public', 'IGNISIGN_BROADCASTABLE_ACTIONS_TYPE'],
-      IgnisignPrivateFileDto: ['@ignisign/public', 'IgnisignPrivateFileDto'],
-    }),
-  ], */
+
 };
