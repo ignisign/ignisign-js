@@ -250,16 +250,7 @@ export class IgnisignJs {
 
       const baseMsg = "[ERROR][IgnisignJS]: Error when handling event from Ignisign Iframe";
 
-      if (!event?.data?.type || !event?.data?.data){
-
-        console.error(`${baseMsg} - Event malformed`, event);
-        if(this._iFrameMessagesCallbacks?.handleSignatureRequestError)
-          this._iFrameMessagesCallbacks.handleSignatureRequestError(
-            IGNISIGN_ERROR_CODES.IGNISIGN_JS_EVENT_MALFORMED, 
-            { event }, 
-            this._signerId,
-            this._signatureRequestId);
-      } else {
+      if (event?.data?.type && !event?.data?.data) {
         const { type, data }: IgnisignBroadcastableAction_Dto = event.data;
         console.error(`${baseMsg}: ${type}`, data, e);
         if(this._iFrameMessagesCallbacks?.handleSignatureRequestError)
