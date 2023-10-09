@@ -1,6 +1,6 @@
 {
   "name": "@ignisign/js",
-  "version": "1.0.65",
+  "version": "1.0.68",
   "license": "MIT",
   "private": false,
   "files": [
@@ -25,7 +25,7 @@
     "watch": "tsc -b -w --preserveWatchOutput"
   },
   "dependencies": {
-    "@ignisign/public": "1.0.67"
+    "@ignisign/public": "1.0.68"
     
   },
   "devDependencies": {
