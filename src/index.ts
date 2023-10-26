@@ -6,7 +6,8 @@ import {
   IgnisignBroadcastableAction_SignatureErrorDto,
   IGNISIGN_ERROR_CODES,
   IgnisignDocument_PrivateFileDto,
-  IgnisignBroadcastableAction_SignatureFinalizedDto
+  IgnisignBroadcastableAction_SignatureFinalizedDto,
+  IGNISIGN_SIGNATURE_LANGUAGES
 } from "@ignisign/public";
 
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
@@ -24,6 +25,13 @@ export type Ignisign_InitSignatureRequestCallback = {
   handleSignatureRequestFinalized     ?: (signatureIds: string[], signerId: string, signatureRequestId: string) => Promise<void>;
 }
 
+export type Ignisign_DisplayOptions = {
+  showTitle          ?: boolean ;
+  showDescription    ?: boolean;
+  darkMode           ?: boolean;
+  language           ?: IGNISIGN_SIGNATURE_LANGUAGES;
+}
+
 export type Ignisign_iFrameOptions = {
   width  ?: string;
   height ?: string;
@@ -37,6 +45,12 @@ export class IgnisignJS_SignatureRequest_Initialization_Params {
   closeOnFinish           : boolean  = true;
   iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {};
   iFrameOptions           : Ignisign_iFrameOptions = { width: "100%", height: "500px" }
+  displayOptions          : Ignisign_DisplayOptions = {
+    showTitle          : false,
+    showDescription    : false,
+    darkMode           : false,
+    language           : IGNISIGN_SIGNATURE_LANGUAGES.EN
+  }
 }
 
 export class IgnisignJs {
@@ -67,7 +81,8 @@ export class IgnisignJs {
       signerAuthSecret,
       closeOnFinish,
       iFrameMessagesCallbacks,
-      iFrameOptions
+      iFrameOptions,
+      displayOptions
     } = initParams;
     
     try {
@@ -77,15 +92,18 @@ export class IgnisignJs {
 
       const finalElementId = htmlElementId.startsWith('#') ? htmlElementId.substring(1) : htmlElementId;
       
-      const getSignatureRequestLink = (signatureRequestId, signerId, token) => 
-       `${this._ignisignClientSignUrl}/signature-requests/${signatureRequestId}/signers/${signerId}/sign?token=${token}&signerSecret=${signerAuthSecret}`;
+      const getSignatureRequestLink = (signatureRequestId: string, signerId: string, token: string, displayOptions : Ignisign_DisplayOptions) => {
+        const displayOptionQueries = Object.keys(displayOptions).map(key => `${key}=${displayOptions[key]}`).join('&');
+        const completeUrl = `${this._ignisignClientSignUrl}/signature-requests/${signatureRequestId}/signers/${signerId}/sign?token=${token}&signerSecret=${signerAuthSecret}&${displayOptionQueries}`;
+        return completeUrl;
+      }
       
       this._signerId            = signerId;
       this._signatureRequestId  = signatureRequestId;
       this._closeOnFinish       = closeOnFinish;
 
       this._htmlElementId       = finalElementId;
-      const iframeSrc           =  getSignatureRequestLink(signatureRequestId, signerId, token);
+      const iframeSrc           =  getSignatureRequestLink(signatureRequestId, signerId, token, displayOptions);
       this._iFrameId            = `${finalElementId}-iframe`;
       
       const iframe    = `
@@ -143,7 +161,7 @@ export class IgnisignJs {
     
     this._iFrameMessagesCallbacks = {}; 
 
-    document.getElementById(this._htmlElementId).innerHTML = null;
+    document.getElementById(this._htmlElementId).innerHTML = "";
     window.removeEventListener('message', this._handleEvent.bind(this));
 
     if(this._elementResizeObserver)
