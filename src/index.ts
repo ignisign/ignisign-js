@@ -29,7 +29,7 @@ export type Ignisign_DisplayOptions = {
   showTitle          ?: boolean ;
   showDescription    ?: boolean;
   darkMode           ?: boolean;
-  language           ?: IGNISIGN_SIGNATURE_LANGUAGES;
+  forceLanguage      ?: IGNISIGN_SIGNATURE_LANGUAGES;
 }
 
 export type Ignisign_iFrameOptions = {
@@ -44,13 +44,12 @@ export class IgnisignJS_SignatureRequest_Initialization_Params {
   signerAuthSecret        : string;
   closeOnFinish           : boolean  = true;
   iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {};
-  iFrameOptions           : Ignisign_iFrameOptions = { width: "100%", height: "500px" }
+  iFrameOptions           : Ignisign_iFrameOptions  = { width: "100%", height: "500px" };
   displayOptions          : Ignisign_DisplayOptions = {
-    showTitle          : false,
-    showDescription    : false,
-    darkMode           : false,
-    language           : IGNISIGN_SIGNATURE_LANGUAGES.EN
-  }
+    showTitle        : false,
+    showDescription  : false,
+    darkMode         : false
+  };
 }
 
 export class IgnisignJs {
