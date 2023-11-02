@@ -45,7 +45,7 @@ export class IgnisignJS_SignatureRequest_Initialization_Params {
   closeOnFinish           : boolean  = true;
   iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {};
   iFrameOptions           : Ignisign_iFrameOptions  = { width: "100%", height: "500px" };
-  displayOptions          : Ignisign_DisplayOptions = {
+  displayOptions         ?: Ignisign_DisplayOptions = {
     showTitle        : false,
     showDescription  : false,
     darkMode         : false
