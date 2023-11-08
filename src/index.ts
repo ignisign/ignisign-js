@@ -26,10 +26,11 @@ export type Ignisign_InitSignatureRequestCallback = {
 }
 
 export type Ignisign_DisplayOptions = {
-  showTitle          ?: boolean ;
-  showDescription    ?: boolean;
-  darkMode           ?: boolean;
-  forceLanguage      ?: IGNISIGN_SIGNATURE_LANGUAGES;
+  showTitle                     ?: boolean ;
+  showDescription               ?: boolean;
+  darkMode                      ?: boolean;
+  forceLanguage                 ?: IGNISIGN_SIGNATURE_LANGUAGES;
+  forceShowDocumentInformations ?: boolean;
 }
 
 export type Ignisign_iFrameOptions = {
@@ -78,9 +79,10 @@ export class IgnisignJs {
       iFrameMessagesCallbacks,
       iFrameOptions,
       displayOptions = {
-        showTitle        : false,
-        showDescription  : false,
-        darkMode         : false
+        showTitle                     : false,
+        showDescription               : false,
+        darkMode                      : false,
+        forceShowDocumentInformations : false
       }
     } = initParams;
     
