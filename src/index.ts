@@ -11,8 +11,8 @@ import {
 } from "@ignisign/public";
 
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
-const IFRAME_MIN_WIDTH  = 300; 
-const IFRAME_MIN_HEIGHT = 500;
+const IFRAME_MIN_WIDTH  = 200; 
+const IFRAME_MIN_HEIGHT = 400;
 
 export enum IGNISIGN_JS_EVENTS {
   IGNISIGN_LOADED  = 'IGNISIGN_LOADED',
@@ -38,15 +38,15 @@ export type Ignisign_iFrameOptions = {
   height ?: string;
 }
 export class IgnisignJS_SignatureRequest_Initialization_Params {
-  htmlElementId           : string;
-  signatureRequestId      : string;
-  signerId                : string;
-  token                   : string;
-  signerAuthSecret        : string;
-  closeOnFinish           : boolean  = true;
-  iFrameMessagesCallbacks : Ignisign_InitSignatureRequestCallback = {};
-  iFrameOptions           : Ignisign_iFrameOptions  = { width: "100%", height: "500px" };
-  displayOptions         ?: Ignisign_DisplayOptions;
+  htmlElementId            : string;
+  signatureRequestId       : string;
+  signerId                 : string;
+  token                    : string;
+  signerAuthSecret         : string;
+  iFrameMessagesCallbacks  : Ignisign_InitSignatureRequestCallback = {};
+  closeOnFinish           ?: boolean;
+  iFrameOptions           ?: Ignisign_iFrameOptions;  
+  displayOptions          ?: Ignisign_DisplayOptions;
 }
 
 export class IgnisignJs {
@@ -59,6 +59,7 @@ export class IgnisignJs {
   private _iframeResizeObserver            : ResizeObserver;
   private _signerId                        : string;
   private _signatureRequestId              : string;
+  private _iFrameOptions                   : Ignisign_iFrameOptions;
 
   constructor(
     protected appId                 : string, 
@@ -75,9 +76,9 @@ export class IgnisignJs {
       signerId,
       token,
       signerAuthSecret,
-      closeOnFinish,
       iFrameMessagesCallbacks,
-      iFrameOptions,
+      closeOnFinish  = true,
+      iFrameOptions  = { width: "100%", height: "500px" },
       displayOptions = {
         showTitle                     : false,
         showDescription               : false,
@@ -102,6 +103,7 @@ export class IgnisignJs {
       this._signerId            = signerId;
       this._signatureRequestId  = signatureRequestId;
       this._closeOnFinish       = closeOnFinish;
+      this._iFrameOptions       = iFrameOptions;
 
       this._htmlElementId       = finalElementId;
       const iframeSrc           =  getSignatureRequestLink(signatureRequestId, signerId, token, displayOptions);
@@ -113,8 +115,8 @@ export class IgnisignJs {
           allow="publickey-credentials-create allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-top-navigation"
           src="${iframeSrc}"
           title='Ignisign'
-          ${iFrameOptions?.width  ? `width="${iFrameOptions.width}"` : ''}
-          ${iFrameOptions?.height ? `height="${iFrameOptions.height}"` : ''}
+          ${this._iFrameOptions?.width  ? `width="${this._iFrameOptions.width}"` : ''}
+          ${this._iFrameOptions?.height ? `height="${this._iFrameOptions.height}"` : ''}
         />
       `;
       const htmlElement = document.getElementById(this._htmlElementId);
@@ -145,6 +147,24 @@ export class IgnisignJs {
       console.error("[ERROR][IgnisignJS]: Error when initializing signature request", e);
       return Promise.reject(e);
     }
+  }
+
+  public updateIFrameOptions(iFrameOptions : Ignisign_iFrameOptions ): void {
+    if(!this._iFrameId)
+      throw new Error(`[ERROR][IgnisignJS]: No signature request initialized`);
+
+    const iframeElement = document.querySelector<HTMLIFrameElement>(`#${this._iFrameId}`);
+
+    if (!iframeElement)
+      throw new Error(`[ERROR][IgnisignJS]: No signature request initialized`);
+
+    this._iFrameOptions = iFrameOptions;
+
+    if(this._iFrameOptions?.width)
+      iframeElement.width = this._iFrameOptions.width;
+
+    if(this._iFrameOptions?.height)
+      iframeElement.height = this._iFrameOptions.height;
   }
 
   public cancelSignatureRequest(): void {
