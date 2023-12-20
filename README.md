@@ -1,166 +1,185 @@
-This is the library that can be used to integrate the Ignisign signature into your application.
 
-This integration mode is called `embedded` mode. 
 
-You can also integrate Ignisign with an `by side` mode. 
 
-In this mode, the user is redirected to the Ignisign application to sign the document directly by receiving a link from ignisign by email, and all the process is managed by Ignisign. 
+## Integrating Ignisign Signature in Web Applications
 
-More information about these two modes can be found [here](https://doc.ignisign.io/#tag/Embeded-or-By-Side-Integration).
+This library facilitates the integration of the Ignisign electronic signature into web-based applications using the `embedded` mode. 
 
-If you are looking for the NodeJS Backend library, it is available [here](https://github.com/ignisign/ignisign-node) 
+Alternatively, Ignisign can be integrated in a `by side` mode, where users are redirected to the Ignisign platform to sign documents via an email link, with Ignisign managing the entire process.
+
+For detailed information on these integration modes, visit [Embedded or By-Side Integration](https://doc.ignisign.io/#tag/Embeded-or-By-Side-Integration).
+
+If you are looking for the NodeJS Backend library, it is available [here](https://github.com/ignisign/ignisign-node).
 
 ## Installation
 
-You can install the library using npm.
+Install the library using npm:
 
 ```bash
 npm install @ignisign/ignisign-js
 ```
 
-It's also possibile to integrate the library using a script tag in a standalone means
-
-```html
-<script src="https://ignisign.io/assets/ignisign-js.min.js"></script>
-```
-
-You also need an Ignisign account. You can create one [here](https://console.ignisign.io/signup). Do not hesitate it's Free ! :)
-
+An Ignisign account is required, which can be created for free at [Ignisign Sign Up](https://console.ignisign.io/signup).
 
 ## Examples
 
-2 integrations examples are available to show how the interaction with can be used.
-
-You can find these examples [here](https://github.com/ignisign/ignisign-js/tree/main/examples/npm-based) and [here](https://github.com/ignisign/ignisign-js/tree/main/examples/standalone)
+Find integration examples [here](https://github.com/ignisign/ignisign-examples/tree/main/ignisign-js).
 
 ## Usage
 
-### Initiate the IgnisignJs class.
+### Initializing IgnisignJs Class
 
-First at all you need to initiate the IgnisignJs class
-You will need an `appId` and an `application environment` 
-
+To use IgnisignJs, first initialize the class. You will need an `appId` and an `application environment`:
 
 ```typescript
 import { IgnisignJs } from "@ignisign/ignisign-js"
 
 const ignisignJs = new IgnisignJs(appId, appEnv);
 ```
-You can found your appId in the API Keys section of your application into the [Ignisign Console](https://console.ignisign.io/). 
 
-The `application environment` is a value of the following enum:
+Find your `appId` and `appEnv` in the "API Keys" section of the [Ignisign Console](https://console.ignisign.io/). The `application environment` is defined as:
+
 ```typescript
 enum IGNISIGN_APPLICATION_ENV {
-  DEVELOPMENT   = "DEVELOPMENT",
-  STAGING       = "STAGING",
-  PRODUCTION    = "PRODUCTION",
+  DEVELOPMENT = "DEVELOPMENT",
+  STAGING = "STAGING",
+  PRODUCTION = "PRODUCTION",
 }
 ```
 
-## Initialize a signature request.
+### Initializing a Signature Session
 
-To initialize a signature request, you need to call the `initSignatureRequest` method of the `ignisignJs` object you created before.
+To start a signature session, use the `initSignatureSession` method of your `ignisignJs` instance:
 
+#### Error Handling
+
+Implement `handleSignatureSessionError` to manage errors:
 
 ```typescript
-import { IgnisignJs, IgnisignJS_SignatureRequest_Initialization_Params, IgnisignPrivateFileDto } from "@ignisign/ignisign-js"
-
-// RECOMMENDED
-// This method must be implemented if you want to handle the signature request errors
-const handleSignatureRequestError = async (
-    errorCode: IGNISIGN_ERROR_CODES, // The error code
-    errorContext: any, //a context that will help you to understand from where the error comes from
-    signerId: string, // The id of the signer
-    signatureRequestId: string // The id of the signature request
-  ) : Promise<void> {
-    // Here you can handle the error
+const handleSignatureSessionError = async (
+    errorCode, errorContext, signerId, signatureRequestId
+  ) : Promise<void> => {
+    // Error handling logic here
   }
+```
 
-// RECOMMENDED
-// This method must be implemented if you want to handle the signature request finalization
-// If you want to close automatically the signature request iframe when the signature request is finalized, you can set the closeOnFinish parameter to true when you call the initSignatureRequest method
-const handleSignatureRequestFinalized = async (
-  signatureIds: string[], // The ids of the signatures 
-    signerId: string, // The id of the signer
-    signatureRequestId: string // The id of the signature request
-  ) : Promise<void> {
-    // Here you can handle the signature request finalization
+`handleSignatureSessionError` Params
+- `errorCode`: The error code
+- `errorContext`: A context that will help you to understand from where the error comes from
+- `signerId` : The id of the signer
+- `signatureRequestId` : The id of the signature request
+
+
+
+#### Finalizing Signatures
+
+For handling the completion of signatures, use `handleSignatureSessionFinalized`:
+
+```typescript
+const handleSignatureSessionFinalized = async (
+    signatureIds, signerId, signatureRequestId
+  ) : Promise<void> => {
+    // Finalization logic here
   }
+```
 
-// OPTIONAL 
-//This method must be implemented if the signature profile linked to the signature request is configured to use a private files.
+`handleSignatureSessionFinalized` params
+
+- `signatureIds` : The ids of the signatures 
+- `signerId` : The id of the signer
+- `signatureRequestId`: The id of the signature requ
+
+#### Managing Private File Information
+
+For private file info provisioning, implement `handlePrivateFileInfoProvisioning`:
+
+```typescript
 const handlePrivateFileInfoProvisioning = async (
-    
-    documentId          : string,   // The id of the document to sign
-    externalDocumentId  : string,  // An reference that refers to the document to sign into your application - You have to provide it when you provide the document to Ignisign
-    signerId            : string,  // The id of the signer
-    signatureRequestId  : string   // The id of the signature request
-  ): Promise<IgnisignPrivateFileDto> => {
-    // Here you can call your backend to get the private file information
+    documentId, externalDocumentId, signerId, signatureRequestId
+  ): Promise<IgnisignDocument_PrivateFileDto> => {
+    // Logic to retrieve private file information
+  }
+```
 
-    const privateFileDto : IgnisignPrivateFileDto = {
-      // The url of the file to sign
-      fileUrl: "https://my-file-url.com/a-file.pdf", 
-      // The mime type of the file to sign
-      mimeType: "application/pdf",
-      // The name of the file to sign
-      fileName: "A-very-important-file.pdf",
-      // A bearer token to access the file
-      // Optionnal
-      // if provided, the bearer token will be placed into the Authorization header of the request
-      bearer : "XXX..."
-    }
+`handlePrivateFileInfoProvisioning` params
 
-    return privateFileDto
-}
+- `documentId` : The id of the document to sign
+- `externalDocumentId` : An reference that refers to the document to sign into your application - You have to provide it when you provide the document to Ignisign
+- `signerId` : The id of the signer
+- `signatureRequestId` : The id of the signature request
+
+`IgnisignPrivateFileDto` fields
+
+- `fileUrl`   : The url of the file to sign
+- `mimeType`  : The mime type of the file to sign
+- `fileName`  : The name of the file to sign
+- `bearer`    : Optional - A bearer token to access the file -  if provided, the bearer token will be placed into the Authorization header of the request
 
 
-const initParams: IgnisignJS_SignatureRequest_Initialization_Params = {
-  htmlElementId       : "my-div-signature-request-request-id", // the id of the html element that will contain the signature request iframe
-  signatureRequestId  : "6490205421ac2f001cace77e" , // The id of the signature request - this value is provided to your backend by webhook when the signature request is created
-  signerId            : "6490205421ac0f001cace47e", // The id of the signer - this value is provided to your backend by webhook when the signature request is created
-  token               : "6490205421ac2f001cace77e6490205421ac2f001cace77e6490205421ac2f001cace77e", // The unique token that allows you to access to the signature request for the signer - This value is provided to your backend by webhook when the signature request is created
-  signerAuthSecret    : "6490205421ac0f001cace47e" , // The secret that allows you to authenticate the signer - This value is provided to your backend by webhook when the signer is created
-  closeOnFinish       : true, // OPTIONAL - default true - If true, the signature request iframe will be closed automatically in case of finalization or error 
-  iFrameMessagesCallbacks : { // The callbacks that will be called when the signature request iframe send a message to the parent window
+### Signature Session Initialization Parameters
+
+Define the initialization parameters for the signature session:
+
+```typescript
+const initParams: IgnisignJS_SignatureSession_Initialization_Params = {
+  htmlElementId          : "my-div-signature-request-request-id",
+  signatureRequestId     : "6490205421ac2fXXXXX" ,
+  signerId               : "6490205421ac2fXXXXX",
+  signatureSessionToken  : "6490205421ac2fXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  signerAuthSecret       : "6490205421ac2fXXXXX" , 
+  closeOnFinish          : true,
+  sessionCallbacks : {
     handleSignatureRequestError,
     handleSignatureRequestFinalized,
     handlePrivateFileInfoProvisioning,
   }
-  iFrameOptions : { // OPTIONAL - The options that will be used to configure the signature request iframe
+  dimensions : {
     width: "100%",
     height: "500px",
+  },
+  displayOptions : {
+    showTitle                     : false,
+    showDescription               : false,
+    darkMode                      : false,
+    forceShowDocumentInformations : false
   }
 }
 
-await ignisignJs.initSignatureRequest(initParams);
-
+await ignisignJs.initSignatureSession(initParams);
 ```
 
-**Additional Documentation** that will help you to implement IgnisignJs integration : 
-- **Private files** Documentation : [https://doc.ignisign.io/#tag/Private-Files](https://doc.ignisign.io/#tag/Private-Files)
-- Explaination of the **Signature Profile** Principle : [https://doc.ignisign.io/#tag/Signature-Profiles](https://doc.ignisign.io/#tag/Signature-Profiles)
-- **Webhook** Documentation : [https://doc.ignisign.io/#tag/Webhooks](https://doc.ignisign.io/#tag/Webhooks)
+
+IgnisignJS_SignatureRequest_Initialization_Params fields informations
+
+- `htmlElementId` :  The id of the html element that will contain the signature request iframe
+- `signatureRequestId` : The id of the signature request - this value is provided to your backend by webhook when the signature request is created
+- `signerId` :  The id of the signer - this value is provided to your backend by webhook when the signature request is created
+- `signatureSessionToken` : The unique token that allows you to access to the signature request for the signer - This value is provided to your backend by webhook when the signature request is created
+- `signerAuthSecret` : The secret that allows you to authenticate the signer - This value is provided to your backend by webhook when the signer is created
+- `closeOnFinish` : OPTIONAL - default true - If true, the signature request iframe will be closed automatically in case of finalization or error 
+- `sessionCallbacks` :  OPTIONAL The callbacks that will be called when the signature request iframe send a message to the parent window
+- `sessionCallbacks.handlePrivateFileInfoProvisioning` :OPTIONAL -  This method must be implemented if the signature profile linked to the signature request is configured to use a private files. If you want to close automatically the signature request iframe when the signature request is finalized, you can set the closeOnFinish parameter to true when you call the initSignatureRequest method
+- `sessionCallbacks.handleSignatureRequestError` : RECOMMENDED - This method must be implemented if you want to handle the signature request errors.
+- `sessionCallbacks.handleSignatureRequestFinalized` : RECOMMENDED -  This method must be implemented if you want to handle the signature request finalization.
+- `dimensions` : OPTIONAL - The options that will be used to configure the signature request iframe
+- `dimensions.width` : default: "100%"
+- `dimensions.height` : default  "500px"
+- `displayOptions` : OPTIONAL - Option taht determinate the content displayed into the signing interface
+- `displayOptions.showTitle` : default: false - Show the title of the signature request like in by-side mode
+- `displayOptions.showDescription` : default: false - Show the description of the signature request like in by-side mode
+- `displayOptions.darkMode` : default : "Browser" force the darkMode of the content.
+- `displayOptions.forceShowDocumentInformations` : default : false 
 
 
-## Close a Signature Request
+Refer to the Ignisign documentation for detailed parameter descriptions and additional guidance:
+- [Private Files Documentation](https://doc.ignisign.io/#tag/Private-Files)
+- [Signature Profiles Explanation](https://doc.ignisign.io/#tag/Signature-Profiles)
+- [Webhooks Documentation](https://doc.ignisign.io/#tag/Webhooks)
 
-If you want to close a signature request before the end of the process managed by Ignisign, you can call the `closeSignatureRequest` method of the `ignisignJs` object you created before.
+## Canceling a Signature Session
+
+To prematurely close a signature session, call `cancelSignatureSession` on your `ignisignJs` instance:
 
 ```typescript
-ignisignJs.closeSignatureRequest();
+ignisignJs.cancelSignatureSession();
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -19,13 +19,13 @@ export enum IGNISIGN_JS_EVENTS {
   IFRAME_TOO_SMALL = 'IFRAME_TOO_SMALL'
 }
 
-export type Ignisign_InitSignatureRequestCallback = {
+export type IgnisignJS_SignatureSession_Callbacks = {
   handlePrivateFileInfoProvisioning   ?: (documentId: string, externalDocumentId: string, signerId : string, signatureRequestId: string) => Promise<IgnisignDocument_PrivateFileDto>;
-  handleSignatureRequestError         ?: (errorCode: IGNISIGN_ERROR_CODES, errorContext: any, signerId: string, signatureRequestId: string) => Promise<void>;
-  handleSignatureRequestFinalized     ?: (signatureIds: string[], signerId: string, signatureRequestId: string) => Promise<void>;
+  handleSignatureSessionError         ?: (errorCode: IGNISIGN_ERROR_CODES, errorContext: any, signerId: string, signatureRequestId: string) => Promise<void>;
+  handleSignatureSessionFinalized     ?: (signatureIds: string[], signerId: string, signatureRequestId: string) => Promise<void>;
 }
 
-export type Ignisign_DisplayOptions = {
+export type IgnisignJS_SignatureSession_DisplayOptions = {
   showTitle                     ?: boolean ;
   showDescription               ?: boolean;
   darkMode                      ?: boolean;
@@ -33,33 +33,33 @@ export type Ignisign_DisplayOptions = {
   forceShowDocumentInformations ?: boolean;
 }
 
-export type Ignisign_iFrameOptions = {
+export type IgnisignJS_SignatureSession_Dimensions = {
   width  ?: string;
   height ?: string;
 }
-export class IgnisignJS_SignatureRequest_Initialization_Params {
+export class IgnisignJS_SignatureSession_Initialization_Params {
   htmlElementId            : string;
   signatureRequestId       : string;
   signerId                 : string;
-  token                    : string;
+  signatureSessionToken    : string;
   signerAuthSecret         : string;
-  iFrameMessagesCallbacks  : Ignisign_InitSignatureRequestCallback = {};
+  sessionCallbacks         : IgnisignJS_SignatureSession_Callbacks = {};
   closeOnFinish           ?: boolean;
-  iFrameOptions           ?: Ignisign_iFrameOptions;  
-  displayOptions          ?: Ignisign_DisplayOptions;
+  dimensions              ?: IgnisignJS_SignatureSession_Dimensions;;  
+  displayOptions          ?: IgnisignJS_SignatureSession_DisplayOptions;
 }
 
 export class IgnisignJs {
   private readonly  _ignisignClientSignUrl : string;
   private _htmlElementId                   : string;
   private _iFrameId                        : string;
-  private _iFrameMessagesCallbacks         : Ignisign_InitSignatureRequestCallback = {};
+  private _iFrameMessagesCallbacks         : IgnisignJS_SignatureSession_Callbacks = {};
   private _closeOnFinish                   : boolean = true;
   private _elementResizeObserver           : ResizeObserver;
   private _iframeResizeObserver            : ResizeObserver;
   private _signerId                        : string;
   private _signatureRequestId              : string;
-  private _iFrameOptions                   : Ignisign_iFrameOptions;
+  private _iFrameOptions                   : IgnisignJS_SignatureSession_Dimensions;
 
   constructor(
     protected appId                 : string, 
@@ -69,16 +69,16 @@ export class IgnisignJs {
     this._ignisignClientSignUrl = ignisignClientSignUrl || DEFAULT_IGNISIGN_CLIENT_SIGN_URL;
   }
 
-  public async initSignatureRequest(initParams: IgnisignJS_SignatureRequest_Initialization_Params): Promise<void> {
+  public async initSignatureSession(initParams: IgnisignJS_SignatureSession_Initialization_Params): Promise<void> {
     const {
       htmlElementId,
       signatureRequestId,
       signerId,
-      token,
+      signatureSessionToken,
       signerAuthSecret,
-      iFrameMessagesCallbacks,
+      sessionCallbacks,
       closeOnFinish  = true,
-      iFrameOptions  = { width: "100%", height: "500px" },
+      dimensions  = { width: "100%", height: "500px" },
       displayOptions = {
         showTitle                     : false,
         showDescription               : false,
@@ -94,7 +94,7 @@ export class IgnisignJs {
 
       const finalElementId = htmlElementId.startsWith('#') ? htmlElementId.substring(1) : htmlElementId;
       
-      const getSignatureRequestLink = (signatureRequestId: string, signerId: string, token: string, displayOptions : Ignisign_DisplayOptions) => {
+      const getSignatureSessionLink = (signatureRequestId: string, signerId: string, token: string, displayOptions : IgnisignJS_SignatureSession_DisplayOptions) => {
         const displayOptionQueries = Object.keys(displayOptions).map(key => `${key}=${displayOptions[key]}`).join('&');
         const completeUrl = `${this._ignisignClientSignUrl}/signature-requests/${signatureRequestId}/signers/${signerId}/sign?token=${token}&signerSecret=${signerAuthSecret}&${displayOptionQueries}`;
         return completeUrl;
@@ -103,13 +103,12 @@ export class IgnisignJs {
       this._signerId            = signerId;
       this._signatureRequestId  = signatureRequestId;
       this._closeOnFinish       = closeOnFinish;
-      this._iFrameOptions       = iFrameOptions;
-
+      this._iFrameOptions       = dimensions;
       this._htmlElementId       = finalElementId;
-      const iframeSrc           =  getSignatureRequestLink(signatureRequestId, signerId, token, displayOptions);
+      const iframeSrc           = getSignatureSessionLink(signatureRequestId, signerId, signatureSessionToken, displayOptions);
       this._iFrameId            = `${finalElementId}-iframe`;
       
-      const iframe    = `
+      const iframe = `
         <iframe style="margin: 0 auto;"
           id="${this._iFrameId}"
           allow="publickey-credentials-create allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-top-navigation"
@@ -119,6 +118,7 @@ export class IgnisignJs {
           ${this._iFrameOptions?.height ? `height="${this._iFrameOptions.height}"` : ''}
         />
       `;
+
       const htmlElement = document.getElementById(this._htmlElementId);
       
       if(!htmlElement)
@@ -133,7 +133,7 @@ export class IgnisignJs {
 
       this._checkIfIframeIsTooSmall();
 
-      this._iFrameMessagesCallbacks = iFrameMessagesCallbacks;
+      this._iFrameMessagesCallbacks = sessionCallbacks;
 
       this._elementResizeObserver = new ResizeObserver(this._checkIfIframeIsTooSmall.bind(this));
       this._elementResizeObserver.observe(htmlElement);
@@ -149,7 +149,7 @@ export class IgnisignJs {
     }
   }
 
-  public updateIFrameOptions(iFrameOptions : Ignisign_iFrameOptions ): void {
+  public updateSize(iFrameOptions : IgnisignJS_SignatureSession_Dimensions ): void {
     if(!this._iFrameId)
       throw new Error(`[ERROR][IgnisignJS]: No signature request initialized`);
 
@@ -167,7 +167,7 @@ export class IgnisignJs {
       iframeElement.height = this._iFrameOptions.height;
   }
 
-  public cancelSignatureRequest(): void {
+  public cancelSignatureSession(): void {
     this._closeIframe();
   }
 
@@ -196,51 +196,6 @@ export class IgnisignJs {
     this._iframeResizeObserver = null;
   }
 
-  private _finalizeSignatureRequest(infos: IgnisignBroadcastableAction_SignatureFinalizedDto): void {
-    if(!infos?.data?.signatureIds )
-      throw new Error(`event data malformed`);
-
-    if(this._iFrameMessagesCallbacks?.handleSignatureRequestFinalized)
-      this._iFrameMessagesCallbacks.handleSignatureRequestFinalized(
-        infos.data.signatureIds, 
-        this._signerId,
-        this._signatureRequestId
-      );
-
-    if(this._closeOnFinish)
-      this._closeIframe();
-  }
-
-  private _manageSignatureRequestError(infos: IgnisignBroadcastableAction_SignatureErrorDto): void {
-    if(!infos?.data?.errorCode)
-      throw new Error(`event data malformed`);
-
-    if(this._iFrameMessagesCallbacks?.handleSignatureRequestError)
-      this._iFrameMessagesCallbacks.handleSignatureRequestError(
-        infos.data.errorCode, 
-        infos?.data?.errorContext, 
-        this._signerId,
-        this._signatureRequestId
-      );
-
-    if(this._closeOnFinish)
-      this._closeIframe();
-  }
-
-  private async _managePrivateFileInfoProvisioning(infos: IgnisignBroadcastableAction_PrivateFileRequestDto): Promise<IgnisignDocument_PrivateFileDto> {
-    if(!infos?.data?.documentId)
-      throw new Error(`event data malformed`);
-
-    if(!this._iFrameMessagesCallbacks?.handlePrivateFileInfoProvisioning)
-      throw new Error(`[ERROR][IgnisignJS]: Callback handlePrivateFileInfoProvisioning not set`); 
-
-    return this._iFrameMessagesCallbacks.handlePrivateFileInfoProvisioning(
-      infos.data.documentId,
-      infos.data.externalDocumentId || null,
-      this._signerId,
-      this._signatureRequestId
-    );
-  }
 
   private async _handleEvent (event: MessageEvent<IgnisignBroadcastableAction_Dto>): Promise<void> {
 
@@ -292,16 +247,66 @@ export class IgnisignJs {
       if (event?.data?.type && !event?.data?.data) {
         const { type, data }: IgnisignBroadcastableAction_Dto = event.data;
         console.error(`${baseMsg}: ${type}`, data, e);
-        if(this._iFrameMessagesCallbacks?.handleSignatureRequestError)
-          this._iFrameMessagesCallbacks.handleSignatureRequestError(
+
+        if(this._iFrameMessagesCallbacks?.handleSignatureSessionError)
+          this._iFrameMessagesCallbacks.handleSignatureSessionError(
             IGNISIGN_ERROR_CODES.IGNISIGN_JS_HANDLE_EVENT_ERROR, 
             { type, data, e }, 
             this._signerId,
             this._signatureRequestId);
+            
+      } else {
+        console.error(`${baseMsg}:`, e);
       }
     }
   }
-  
+
+  private _finalizeSignatureRequest(infos: IgnisignBroadcastableAction_SignatureFinalizedDto): void {
+    if(!infos?.data?.signatureIds )
+      throw new Error(`event data malformed`);
+
+    if(this._iFrameMessagesCallbacks?.handleSignatureSessionFinalized)
+      this._iFrameMessagesCallbacks.handleSignatureSessionFinalized(
+        infos.data.signatureIds, 
+        this._signerId,
+        this._signatureRequestId
+      );
+
+    if(this._closeOnFinish)
+      this._closeIframe();
+  }
+
+  private _manageSignatureRequestError(infos: IgnisignBroadcastableAction_SignatureErrorDto): void {
+    if(!infos?.data?.errorCode)
+      throw new Error(`event data malformed`);
+
+    if(this._iFrameMessagesCallbacks?.handleSignatureSessionError)
+      this._iFrameMessagesCallbacks.handleSignatureSessionError(
+        infos.data.errorCode, 
+        infos?.data?.errorContext, 
+        this._signerId,
+        this._signatureRequestId
+      );
+
+    if(this._closeOnFinish)
+      this._closeIframe();
+  }
+
+  private async _managePrivateFileInfoProvisioning(infos: IgnisignBroadcastableAction_PrivateFileRequestDto): Promise<IgnisignDocument_PrivateFileDto> {
+    if(!infos?.data?.documentId)
+      throw new Error(`event data malformed`);
+
+    if(!this._iFrameMessagesCallbacks?.handlePrivateFileInfoProvisioning)
+      throw new Error(`[ERROR][IgnisignJS]: Callback handlePrivateFileInfoProvisioning not set`); 
+
+    return this._iFrameMessagesCallbacks.handlePrivateFileInfoProvisioning(
+      infos.data.documentId,
+      infos.data.externalDocumentId || null,
+      this._signerId,
+      this._signatureRequestId
+    );
+  }
+
   private _checkIfIframeIsTooSmall() {
     const docElement = document.getElementById(this._iFrameId);
 
@@ -321,6 +326,5 @@ export class IgnisignJs {
 }
 
 window['IgnisignJs'] = IgnisignJs;
-
 const ignisignLoadedEvent = new CustomEvent(IGNISIGN_JS_EVENTS.IGNISIGN_LOADED);
 window.dispatchEvent(ignisignLoadedEvent);
