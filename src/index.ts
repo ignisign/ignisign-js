@@ -248,7 +248,7 @@ export class IgnisignJs {
       console.debug('[DEBUG][IgnisignJS]: _handleEvent : ', event);
 
       if(!event?.data?.type || !event?.data?.data)
-        throw new Error(`event malformed`);
+        return;
 
       const { type, data } : IgnisignBroadcastableAction_Dto = event.data;
       
