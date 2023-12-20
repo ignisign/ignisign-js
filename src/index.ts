@@ -200,7 +200,6 @@ export class IgnisignJs {
   private async _handleEvent (event: MessageEvent<IgnisignBroadcastableAction_Dto>): Promise<void> {
 
     try {
-      console.debug('[DEBUG][IgnisignJS]: _handleEvent : ', event);
 
       if(!event?.data?.type || !event?.data?.data)
         throw new Error(`event malformed`);
