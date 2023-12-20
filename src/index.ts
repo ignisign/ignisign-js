@@ -202,7 +202,7 @@ export class IgnisignJs {
     try {
 
       if(!event?.data?.type || !event?.data?.data)
-        throw new Error(`event malformed`);
+        return;
 
       const { type, data } : IgnisignBroadcastableAction_Dto = event.data;
       
