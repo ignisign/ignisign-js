@@ -26,7 +26,7 @@ export type IgnisignJS_SignatureSession_Callbacks = {
 }
 
 export type IgnisignJS_SignatureSession_DisplayOptions = {
-  showTitle                     ?: boolean ;
+  showTitle                     ?: boolean;
   showDescription               ?: boolean;
   darkMode                      ?: boolean;
   forceLanguage                 ?: IGNISIGN_SIGNATURE_LANGUAGES;
