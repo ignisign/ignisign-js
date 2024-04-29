@@ -45,7 +45,7 @@ export class IgnisignJS_SignatureSession_Initialization_Params {
   signerAuthSecret         : string;
   sessionCallbacks         : IgnisignJS_SignatureSession_Callbacks = {};
   closeOnFinish           ?: boolean;
-  dimensions              ?: IgnisignJS_SignatureSession_Dimensions;;  
+  dimensions              ?: IgnisignJS_SignatureSession_Dimensions;
   displayOptions          ?: IgnisignJS_SignatureSession_DisplayOptions;
 }
 
@@ -78,7 +78,7 @@ export class IgnisignJs {
       signerAuthSecret,
       sessionCallbacks,
       closeOnFinish  = true,
-      dimensions  = { width: "100%", height: "500px" },
+      dimensions     = { width: "100%", height: "500px" },
       displayOptions = {
         showTitle                     : false,
         showDescription               : false,
@@ -198,7 +198,6 @@ export class IgnisignJs {
 
 
   private async _handleEvent (event: MessageEvent<IgnisignBroadcastableAction_Dto>): Promise<void> {
-
     try {
 
       if(!event?.data?.type || !event?.data?.data)
