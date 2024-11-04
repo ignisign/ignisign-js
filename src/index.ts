@@ -181,6 +181,9 @@ export class IgnisignJs {
     this._signatureRequestId      = null;
     
     this._iFrameMessagesCallbacks = {}; 
+    
+    if(!document.getElementById(this._htmlElementId)?.innerHTML) 
+      return;
 
     document.getElementById(this._htmlElementId).innerHTML = "";
     window.removeEventListener('message', this._handleEvent.bind(this));
