@@ -7,7 +7,7 @@ import {
   IGNISIGN_ERROR_CODES,
   IgnisignDocument_PrivateFileDto,
   IgnisignBroadcastableAction_SignatureFinalizedDto,
-  IGNISIGN_SIGNATURE_LANGUAGES
+  IGNISIGN_LANGUAGES
 } from "@ignisign/public";
 
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
@@ -29,7 +29,7 @@ export type IgnisignJS_SignatureSession_DisplayOptions = {
   showTitle                     ?: boolean;
   showDescription               ?: boolean;
   darkMode                      ?: boolean;
-  forceLanguage                 ?: IGNISIGN_SIGNATURE_LANGUAGES;
+  forceLanguage                 ?: IGNISIGN_LANGUAGES;
   forceShowDocumentInformations ?: boolean;
 }
 
