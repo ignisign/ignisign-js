@@ -7,7 +7,7 @@ This library facilitates the integration of the Ignisign electronic signature in
 
 Alternatively, Ignisign can be integrated in a `by side` mode, where users are redirected to the Ignisign platform to sign documents via an email link, with Ignisign managing the entire process.
 
-For detailed information on these integration modes, visit [Embedded or By-Side Integration](https://ignisign.io/docs/core-concepts/Embeded_or_By-Side_Integration).
+For detailed information on these integration modes, visit Embedded or By-Side Integration].
 
 If you are looking for the NodeJS Backend library, it is available [here](https://github.com/ignisign/ignisign-node).
 
@@ -170,11 +170,6 @@ IgnisignJS_SignatureRequest_Initialization_Params fields informations
 - `displayOptions.darkMode` : default : "Browser" force the darkMode of the content.
 - `displayOptions.forceShowDocumentInformations` : default : false 
 
-
-Refer to the Ignisign documentation for detailed parameter descriptions and additional guidance:
-- [Private Files Documentation](https://ignisign.io/docs/core-concepts/Full_Privacy)
-- [Signature Profiles Explanation](https://ignisign.io/docs/core-concepts/Signature_Profiles)
-- [Webhooks Documentation](https://ignisign.io/docs/webhooks/webhooks)
 
 ## Canceling a Signature Session
 
