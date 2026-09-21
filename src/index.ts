@@ -209,6 +209,12 @@ export class IgnisignJs {
       if(!event?.data?.type || !event?.data?.data)
         return;
 
+      const expectedOrigin = new URL(this._ignisignClientSignUrl).origin;
+      if(event.origin !== expectedOrigin) {
+        console.warn(`[WARNING][IgnisignJS]: Ignoring message from untrusted origin: ${event.origin}`);
+        return;
+      }
+
       const { type, data } : IgnisignBroadcastableAction_Dto = event.data;
       
       switch (type) {
@@ -230,7 +236,19 @@ export class IgnisignJs {
           if(!data?.url)
             throw new Error(`event data malformed`);
 
-          window.open(data?.url, '_blank');
+          try {
+            const targetUrl = new URL(data.url);
+            const allowedOrigin = new URL(this._ignisignClientSignUrl).origin;
+            
+            if(targetUrl.origin !== allowedOrigin) {
+              console.warn(`[WARNING][IgnisignJS]: Blocked navigation to untrusted URL: ${data.url}`);
+              break;
+            }
+            
+            window.open(data.url, '_blank');
+          } catch(urlError) {
+            console.error(`[ERROR][IgnisignJS]: Invalid URL provided for OPEN_URL action`);
+          }
           break;
 
         case IGNISIGN_BROADCASTABLE_ACTIONS.SIGNATURE_FINALIZED:
