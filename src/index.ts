@@ -60,6 +60,7 @@ export class IgnisignJs {
   private _signerId                        : string | null = null;
   private _signatureRequestId              : string | null = null;
   private _iFrameOptions                   : IgnisignJS_SignatureSession_Dimensions | null = null;
+  private _boundHandleEvent                : ((event: MessageEvent<IgnisignBroadcastableAction_Dto>) => Promise<void>) | null = null;
 
   constructor(
     protected appId                 : string, 
@@ -142,7 +143,8 @@ export class IgnisignJs {
       this._iframeResizeObserver = new ResizeObserver(this._checkIfIframeIsTooSmall.bind(this));
       this._iframeResizeObserver.observe(newIframeElement);
 
-      window.addEventListener('message', this._handleEvent.bind(this));
+      this._boundHandleEvent = this._handleEvent.bind(this);
+      window.addEventListener('message', this._boundHandleEvent);
 
     } catch (e) {
       console.error("[ERROR][IgnisignJS]: Error when initializing signature request");
@@ -189,7 +191,10 @@ export class IgnisignJs {
     
     this._iFrameMessagesCallbacks = {}; 
     
-    window.removeEventListener('message', this._handleEvent.bind(this));
+    if (this._boundHandleEvent) {
+      window.removeEventListener('message', this._boundHandleEvent);
+      this._boundHandleEvent = null;
+    }
 
     if(this._elementResizeObserver) {
       this._elementResizeObserver.disconnect();
