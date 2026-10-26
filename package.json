@@ -39,5 +39,9 @@
     "typescript": "^5.8.3",
     "webpack": "^5.99.5",
     "webpack-cli": "^5.1.4"
+  },
+  "resolutions": {
+    "fast-uri": ">=3.1.9",
+    "follow-redirects": ">=1.16.2"
   }
 }
