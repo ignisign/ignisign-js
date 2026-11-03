@@ -111,7 +111,7 @@ export class IgnisignJs {
       const iframe = `
         <iframe style="margin: 0 auto;"
           id="${this._iFrameId}"
-          allow="publickey-credentials-create allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-top-navigation"
+          allow="publickey-credentials-get; publickey-credentials-create"
           src="${iframeSrc}"
           title='Ignisign'
           ${this._iFrameOptions?.width  ? `width="${this._iFrameOptions.width}"` : ''}
