@@ -242,15 +242,17 @@ export class IgnisignJs {
             throw new Error(`event data malformed`);
 
           try {
+            // The message already comes from the trusted signing origin (checked above), and the
+            // signing page legitimately opens documents and links hosted on other origins.
+            // Only block non-web schemes (javascript:, data:, ...) and do not hand the new tab a reference to this window.
             const targetUrl = new URL(data.url);
-            const allowedOrigin = new URL(this._ignisignClientSignUrl).origin;
-            
-            if(targetUrl.origin !== allowedOrigin) {
-              console.warn(`[WARNING][IgnisignJS]: Blocked navigation to untrusted URL: ${data.url}`);
+
+            if(targetUrl.protocol !== 'https:' && targetUrl.protocol !== 'http:') {
+              console.warn(`[WARNING][IgnisignJS]: Blocked OPEN_URL with unsupported scheme: ${targetUrl.protocol}`);
               break;
             }
-            
-            window.open(data.url, '_blank');
+
+            window.open(targetUrl.href, '_blank', 'noopener');
           } catch(urlError) {
             console.error(`[ERROR][IgnisignJS]: Invalid URL provided for OPEN_URL action`);
           }
