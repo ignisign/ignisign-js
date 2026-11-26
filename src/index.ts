@@ -13,6 +13,8 @@ import {
 const DEFAULT_IGNISIGN_CLIENT_SIGN_URL = 'https://sign.ignisign.io';
 const IFRAME_MIN_WIDTH  = 200; 
 const IFRAME_MIN_HEIGHT = 400;
+// Any https host on ignisign.io (exact origin match: no port, no lookalike suffix such as ignisign.io.evil.com).
+const IGNISIGN_ORIGIN_REGEX = /^https:\/\/([a-z0-9-]+\.)*ignisign\.io$/;
 
 export enum IGNISIGN_JS_EVENTS {
   IGNISIGN_LOADED  = 'IGNISIGN_LOADED',
@@ -214,8 +216,7 @@ export class IgnisignJs {
       if(!event?.data?.type || !event?.data?.data)
         return;
 
-      const expectedOrigin = new URL(this._ignisignClientSignUrl).origin;
-      if(event.origin !== expectedOrigin) {
+      if(!this._isTrustedOrigin(event.origin)) {
         console.warn(`[WARNING][IgnisignJS]: Ignoring message from untrusted origin: ${event.origin}`);
         return;
       }
@@ -341,10 +342,25 @@ export class IgnisignJs {
 
     return this._iFrameMessagesCallbacks.handlePrivateFileInfoProvisioning(
       infos.data.documentId,
-      infos.data.externalDocumentId || '',
+      (infos.data.externalDocumentId || null) as string,
       this._signerId,
       this._signatureRequestId
     );
+  }
+
+  /** Configured sign URL origin (custom / self-hosted / non-prod env), or any https *.ignisign.io origin. */
+  private _isTrustedOrigin(origin: string): boolean {
+    if(!origin)
+      return false;
+
+    try {
+      if(origin === new URL(this._ignisignClientSignUrl).origin)
+        return true;
+    } catch(e) {
+      // invalid configured URL: fall back to the ignisign.io check
+    }
+
+    return IGNISIGN_ORIGIN_REGEX.test(origin);
   }
 
   private _checkIfIframeIsTooSmall(): void {

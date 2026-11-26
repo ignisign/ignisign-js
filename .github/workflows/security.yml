@@ -38,8 +38,8 @@ jobs:
       - name: Check for high/critical vulnerabilities
         run: |
           AUDIT_OUTPUT=$(yarn audit --level high --json 2>/dev/null || true)
-          HIGH_VULNS=$(echo "$AUDIT_OUTPUT" | grep -c '"severity":"high"' || echo "0")
-          CRITICAL_VULNS=$(echo "$AUDIT_OUTPUT" | grep -c '"severity":"critical"' || echo "0")
+          HIGH_VULNS=$(echo "$AUDIT_OUTPUT" | grep -c '"severity":"high"' || true)
+          CRITICAL_VULNS=$(echo "$AUDIT_OUTPUT" | grep -c '"severity":"critical"' || true)
           
           echo "High severity vulnerabilities: $HIGH_VULNS"
           echo "Critical severity vulnerabilities: $CRITICAL_VULNS"
