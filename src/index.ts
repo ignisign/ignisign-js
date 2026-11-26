@@ -120,7 +120,7 @@ export class IgnisignJs {
       const newIframeElement = document.createElement('iframe');
       newIframeElement.id = this._iFrameId;
       newIframeElement.style.margin = '0 auto';
-      newIframeElement.setAttribute('allow', 'publickey-credentials-create allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-top-navigation');
+      newIframeElement.setAttribute('allow', 'publickey-credentials-get; publickey-credentials-create');
       newIframeElement.src = iframeSrc;
       newIframeElement.title = 'Ignisign';
       

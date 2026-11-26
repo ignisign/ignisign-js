@@ -7,7 +7,7 @@ This library facilitates the integration of the Ignisign electronic signature in
 
 Alternatively, Ignisign can be integrated in a `by side` mode, where users are redirected to the Ignisign platform to sign documents via an email link, with Ignisign managing the entire process.
 
-For detailed information on these integration modes, visit Embedded or By-Side Integration].
+For detailed information on these integration modes, visit [Web Integration](https://ignisign.io/docs/quick-start/signature-interface/Web_Integration).
 
 If you are looking for the NodeJS Backend library, it is available [here](https://github.com/ignisign/ignisign-node).
 
@@ -16,8 +16,10 @@ If you are looking for the NodeJS Backend library, it is available [here](https:
 Install the library using npm:
 
 ```bash
-npm install @ignisign/ignisign-js
+npm install @ignisign/js
 ```
+
+The package name is `@ignisign/js`. There is no `@ignisign/ignisign-js` package and no hosted script: install it from npm and bundle it with your application.
 
 An Ignisign account is required, which can be created for free at [Ignisign Sign Up](https://console.ignisign.io/signup).
 
@@ -32,7 +34,7 @@ Find integration examples [here](https://github.com/ignisign/ignisign-examples/t
 To use IgnisignJs, first initialize the class. You will need an `appId` and an `application environment`:
 
 ```typescript
-import { IgnisignJs } from "@ignisign/ignisign-js"
+import { IgnisignJs } from "@ignisign/js"
 
 const ignisignJs = new IgnisignJs(appId, appEnv);
 ```
@@ -46,6 +48,10 @@ enum IGNISIGN_APPLICATION_ENV {
   PRODUCTION = "PRODUCTION",
 }
 ```
+
+`IGNISIGN_APPLICATION_ENV` is exported by `@ignisign/public`, a dependency of this package. Add it to your own dependencies if your package manager does not hoist it.
+
+The signing page is loaded from `https://sign.ignisign.io` in every environment. `DEVELOPMENT`, `STAGING` and `PRODUCTION` do not use a different hostname: the environment is the one of the API key that created the signature request.
 
 ### Initializing a Signature Session
 
@@ -87,7 +93,9 @@ const handleSignatureSessionFinalized = async (
 
 - `signatureIds` : The ids of the signatures 
 - `signerId` : The id of the signer
-- `signatureRequestId`: The id of the signature requ
+- `signatureRequestId`: The id of the signature request
+
+When the documents of a signature request are signed one by one (the default for signature requests with several documents, see [Documents signed one by one](https://ignisign.io/docs/sdks/changelogs/per-document-signing)), `handleSignatureSessionFinalized` is called once the signer is done: after their last document, or when they choose **Finish**, which cancels the documents they did not sign. It is not called after each document. With `closeOnFinish` (default `true`), the iframe closes at that point.
 
 #### Managing Private File Information
 
@@ -129,10 +137,10 @@ const initParams: IgnisignJS_SignatureSession_Initialization_Params = {
   signerAuthSecret       : "6490205421ac2fXXXXX" , 
   closeOnFinish          : true,
   sessionCallbacks : {
-    handleSignatureRequestError,
-    handleSignatureRequestFinalized,
+    handleSignatureSessionError,
+    handleSignatureSessionFinalized,
     handlePrivateFileInfoProvisioning,
-  }
+  },
   dimensions : {
     width: "100%",
     height: "500px",
@@ -149,22 +157,22 @@ await ignisignJs.initSignatureSession(initParams);
 ```
 
 
-IgnisignJS_SignatureRequest_Initialization_Params fields informations
+`IgnisignJS_SignatureSession_Initialization_Params` fields
 
-- `htmlElementId` :  The id of the html element that will contain the signature request iframe
-- `signatureRequestId` : The id of the signature request - this value is provided to your backend by webhook when the signature request is created
-- `signerId` :  The id of the signer - this value is provided to your backend by webhook when the signature request is created
-- `signatureSessionToken` : The unique token that allows you to access to the signature request for the signer - This value is provided to your backend by webhook when the signature request is created
-- `signerAuthSecret` : The secret that allows you to authenticate the signer - This value is provided to your backend by webhook when the signer is created
+- `htmlElementId` :  The id of the html element that will contain the signature request iframe. The element must be at least 200px wide; the iframe warns below 400px of height
+- `signatureRequestId` : The id of the signature request - returned when you create the signature request, and sent to your backend by webhook
+- `signerId` :  The id of the signer - returned when you create the signer, and sent to your backend by webhook
+- `signatureSessionToken` : The unique token that allows you to access to the signature request for the signer - returned by the publish call (`signersEmbedded[].token`), and sent to your backend by the signature request webhook
+- `signerAuthSecret` : The secret that allows you to authenticate the signer - returned by the signer creation call (`authSecret`). Store it: it is not sent by webhook
 - `closeOnFinish` : OPTIONAL - default true - If true, the signature request iframe will be closed automatically in case of finalization or error 
 - `sessionCallbacks` :  OPTIONAL The callbacks that will be called when the signature request iframe send a message to the parent window
-- `sessionCallbacks.handlePrivateFileInfoProvisioning` :OPTIONAL -  This method must be implemented if the signature profile linked to the signature request is configured to use a private files. If you want to close automatically the signature request iframe when the signature request is finalized, you can set the closeOnFinish parameter to true when you call the initSignatureRequest method
-- `sessionCallbacks.handleSignatureRequestError` : RECOMMENDED - This method must be implemented if you want to handle the signature request errors.
-- `sessionCallbacks.handleSignatureRequestFinalized` : RECOMMENDED -  This method must be implemented if you want to handle the signature request finalization.
+- `sessionCallbacks.handlePrivateFileInfoProvisioning` :OPTIONAL -  This method must be implemented if the signature profile linked to the signature request is configured to use a private files. If you want to close automatically the signature request iframe when the signature request is finalized, you can set the closeOnFinish parameter to true when you call the initSignatureSession method
+- `sessionCallbacks.handleSignatureSessionError` : RECOMMENDED - This method must be implemented if you want to handle the signature request errors.
+- `sessionCallbacks.handleSignatureSessionFinalized` : RECOMMENDED -  This method must be implemented if you want to handle the signature request finalization.
 - `dimensions` : OPTIONAL - The options that will be used to configure the signature request iframe
 - `dimensions.width` : default: "100%"
 - `dimensions.height` : default  "500px"
-- `displayOptions` : OPTIONAL - Option taht determinate the content displayed into the signing interface
+- `displayOptions` : OPTIONAL - Option that determinate the content displayed into the signing interface
 - `displayOptions.showTitle` : default: false - Show the title of the signature request like in by-side mode
 - `displayOptions.showDescription` : default: false - Show the description of the signature request like in by-side mode
 - `displayOptions.darkMode` : default : "Browser" force the darkMode of the content.
